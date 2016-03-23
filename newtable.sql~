@@ -41,10 +41,10 @@ CREATE TABLE `info` (
 
 LOCK TABLES `info` WRITE;
 /*!40000 ALTER TABLE `info` DISABLE KEYS */;
-INSERT INTO `info` VALUES ('space','good','testseries','testspec','www.baidu.com','hhahaha','2000-12-22 00:00:00');
-INSERT INTO `info` VALUES ('space','good','testseries','testspec','www.baidu.com','hhahaha','2000-12-22 00:00:00');
-INSERT INTO `info` VALUES ('oilwear','good','testseries','testspec','www.baidu.com','hhahaha','2000-12-22 00:00:00');
-INSERT INTO `info` VALUES ('space','good','testseries','testspec','www.baidu.com','hhahaha','2000-12-22 00:00:00');
+INSERT INTO `info` VALUES ('testlable1','good','testseries','testspec','www.baidu.com','hhahaha','2000-12-22 00:00:00');
+INSERT INTO `info` VALUES ('testlable2','good','testseries','testspec','www.baidu.com','hhahaha','2000-12-22 00:00:00');
+INSERT INTO `info` VALUES ('testlable2','good','testseries','testspec','www.baidu.com','hhahaha','2000-12-22 00:00:00');
+INSERT INTO `info` VALUES ('testlable3','good','testseries','testspec','www.baidu.com','hhahaha','2000-12-22 00:00:00');
 /*!40000 ALTER TABLE `info` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -213,8 +213,6 @@ def autohome_crawler(brand, series, url_base, last_visit, last_content):
 			record["respond"] = respond = item.select(".mouth-main .mouth-remak span.CommentNumber")[0].text
 			print "upvote is " + upvote
 			print "respond is " + respond
-			comment_date = item.select(".mouth-main .mouth-item .title-name b")[-1].text.strip()
-			print "date: ", comment_date
 			# if there are no add-ons, do not need to follow on.
 			if item.select("dl.add-dl") != []:
 				r = requests.get(record["url"])
@@ -233,7 +231,8 @@ def autohome_crawler(brand, series, url_base, last_visit, last_content):
 						break
 					store_comment(web_name, record, add_on_comment, file)
 
-			record["date"] = comment_date
+			record["date"] = item.select(".mouth-main .mouth-item .title-name b")[-1].text.strip()
+			print "date: ", record["date"]
 			cur_content = hash(main_comment)
 			if cur_content == last_content or record["date"] < last_visit:
 				is_new = 0
@@ -252,8 +251,7 @@ def autohome_crawler(brand, series, url_base, last_visit, last_content):
 			url_comment = url_base + "/index_" + str(page_num) + ".html"
 		else:
 			flag = 0
-	if cnt == 0:
-		print "No comment in url: ", url_base
+	print cnt
 	file.close()
 	log.close()
 
@@ -597,6 +595,8 @@ def netease_crawler(brand, series, url_base, last_visit, last_content):
 def main():
 	global url_pool
 
+	series = u"宝马3系"
+	brand = u"宝马"
 	if not os.path.exists("data/"):
 		os.makedirs("data/")
 	os.chdir("data/")
@@ -604,6 +604,7 @@ def main():
 	# get all series!
 
 	url_pool = get_car_series()
+netstat -tlp
 
 
 	# get all car lists & crawl basic!

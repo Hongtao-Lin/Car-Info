@@ -10,7 +10,7 @@
   },
   "nodes":[
     {"id":1,"name":"性价比高","group":1,"weight":5,"comments":[
-        {"date":"2015-4-5","content":"Just a test","from":"test","url":"www.baidu.com"},
+        {"date":"2015-4-5","content":"Just a test","from":"test"},
         {"date":"2015-4-4","content":"Just a test","from":"pcauto"},
         {"date":"2015-4-4","content":"Just a test","from":"pcauto"},
         {"date":"2015-4-4","content":"Just a test","from":"pcauto"}

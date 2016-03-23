@@ -68,7 +68,7 @@ graph = {};
       for (j in result) {
         comments.push({"date":result[j].date,"content":result[j].comment,"from":result[j].from,"url":result[j].url});
       };
-      node = {"id":int(i)+1,"name":node_list[i],"group":1,"weight":0,"comments":comments};
+      node = {"id":i+1,"name":node_list[i],"group":1,"weight":0,"comments":comments};
       console.log(node);
     });
   }; 

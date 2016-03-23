@@ -233,7 +233,7 @@ def autohome_crawler(brand, series, url_base, last_visit, last_content):
 						break
 					store_comment(web_name, record, add_on_comment, file)
 
-			record["date"] = comment_date
+			
 			cur_content = hash(main_comment)
 			if cur_content == last_content or record["date"] < last_visit:
 				is_new = 0

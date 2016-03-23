@@ -245,7 +245,7 @@ div.comment_detail {
 					else {
 						comment_tmp = comment_item.cloneNode(true);
 						from = "";
-						if (comment_list[i].url) {
+						if (comment_list[i].url != "") {
 							from = '<a href="' + comment_list[i].url + '">' + comment_list[i].from + '</a>';						
 						}
 						else {
