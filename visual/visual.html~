@@ -141,7 +141,7 @@ div.comment_detail {
 		  .append("g")
 		  .attr("class", function(d) { return d.id == 0 ? "main_node center_node" : "firm_node"; })
 		  .style("pointer",function(d) { if(d.id != 0) return "cursor"; })
-		  .on("click", function(d) { if(d.id != 0) return brand_display("汽车"); } );
+		  //.on("click", function(d) { if(d.id != 0) return brand_display("汽车"); } );
 
 		var circle = node.append("circle")
 		  .attr("class", "node")
@@ -188,9 +188,12 @@ div.comment_detail {
 			force.tick();
 		});
 		
-		});
+		});$(".firm_node").click(function() {
+		brand_display("12");	
+	});
 
 	};
+	
 	
 
 	firm_display();

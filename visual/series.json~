@@ -1,0 +1,8 @@
+{
+  "nodes":[
+    {"id":1,"name":"宝马3系 2016款 328i xDrive M运动型","group":1,"weight":5},
+    {"id":2,"name":"宝马5系","group":1,"weight":4},
+    {"id":3,"name":"宝马X1","group":2,"weight":15},
+    {"id":4,"name":"宝马2系旅行车","group":2,"weight":85}
+  ]
+}
