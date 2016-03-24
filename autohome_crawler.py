@@ -69,9 +69,7 @@ def store_comment(record, raw_comment, file):
 	    	conn.close()
 	except MySQLdb.Error,e:
      		print "Mysql Error %d: %s" % (e.args[0], e.args[1])
-	
 
-	# store it in sql.
 	return
 
 def crawl_basic(url_basic, car_id):

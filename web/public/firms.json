@@ -1,0 +1,8 @@
+{
+  "nodes":[
+    {"id":1,"name":"宝马","group":1,"weight":5},
+    {"id":2,"name":"奥迪","group":1,"weight":4},
+    {"id":3,"name":"保时捷","group":2,"weight":15},
+    {"id":4,"name":"奔驰","group":2,"weight":85}
+  ]
+}

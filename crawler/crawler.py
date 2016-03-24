@@ -11,8 +11,10 @@ import copy, collections, datetime, MySQLdb
 #conn=MySQLdb.connect(host='127.0.0.1',user='root',passwd='15980ptpt',db='mysql',port=3306)
 #cur=conn.cursor()
 
-comment_field = ["brand", "series", "spec", "date", "web", "url", "good", "bad", "space", "power", "operate", "oil", "comfort", "appearance", "decoration", "worth", "bugs", "sustain", "other", "upvote", "downvote", "respond"]
+comment_field = ["brand", "series", "spec", "dateNtime", "url", "advantage", "shortcoming", "space", "power", "operation", "oilwear", "comfort", "appearance", "decoration", "costperformance", "failure", "maintenance", "other", "upvote", "downvote", "respond"]
+split_tag = ["【最满意的一点】", "【最不满意的一点】", "【空间】","【动力】","【操控】","【油耗】","【舒适性】","【外观】","【内饰】","【性价比】","【故障】","【保养】","【其他描述】"]
 
+tran_tag={'【最满意的一点】':'advantage','【最不满意的一点】':'shortcoming', '【空间】':'space','【动力】': 'power', '【操控】':'operation', '【油耗】':'oilwear', '【舒适性】':'comfort', '【外观】':'appearance','【内饰】' :'decoration', '【性价比】':'costperformance','【故障】': 'failure', '【保养】':'maintenance','【其他描述】': 'other'}
 comment_dict = collections.OrderedDict()	
 for field in comment_field:
 	comment_dict[field] = ""
@@ -148,14 +150,53 @@ def get_car_series():
 
 def store_comment(web_name, record, raw_comment, file):
 	# processing raw_comment
-
-	# just a temporary test!
-	record["other"] = raw_comment
+	if web_name == "autohome":
+		raw_date=''
+		for tag in split_tag:
+			if len(raw_comment.split(tag))!=1 :
+				record[tran_tag[tag]]+=raw_comment.split(tag)[1].split('【')[0]
+				#print record[tran_tag[tag]]
+	else:
+		# just a temporary test!
+		record["other"] = raw_comment
 
 	for (key, value) in record.items():
 		file.write("%s: %s\n" % (key, value))
 
 	# store it in sql.
+	T=[]
+	i=0
+	for (key, value) in record.items():
+		file.write("%s: %s\n" % (key, value))
+		if i<21:
+			T.append(value)
+			i+=1
+		
+	try:
+		conn=MySQLdb.connect(host='127.0.0.1',user='root',passwd='1234',db='mysql',port=3306)
+	    	cur=conn.cursor()
+
+		conn.set_character_set('utf8')
+
+		cur.execute('SET NAMES utf8;')
+		cur.execute('SET CHARACTER SET utf8;')
+		cur.execute('SET character_set_connection=utf8;')
+
+		sql='use mysql;'
+		cur.execute(sql)
+		#T=['a','b','a','2000-11-22 09:06:22','b','a','b','a','b','a','b','a','b','a','b','a','b','a','b','a','b']
+		sql='insert into comments values(%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s , %s);'
+		#T=["ttt","2000-11-22 09:06:22"]
+		#sql='insert into test values(%s,%s);'
+
+		cur.execute(sql,T)
+		
+	    	cur.close()
+		conn.commit()
+	    	conn.close()
+	except MySQLdb.Error,e:
+     		print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+
 	return
 
 def crawl_basic(url_basic, car_id):

@@ -97,22 +97,35 @@ div.comment_detail {
 	var width = 960;
 	var height = 600;
 
-	
+	function init_display() {
+		$("#view").empty();
+		var svg = d3.select("#view").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+		var force = d3.layout.force()
+			.linkDistance(190)
+			.size([width, height]);	
+	};
 
 	function firm_display() {
 		
 		$("#view").empty();
 		var svg = d3.select("#view").append("svg")
-		.attr("width", width)
-		.attr("height", height);
-		var color = ["#54a4ee", "#bedaf4"];
+			.attr("width", width)
+			.attr("height", height);
 		var force = d3.layout.force()
-		.linkDistance(190)
-		.size([width, height]);	
+			.linkDistance(190)
+			.size([width, height]);	
+
+		var color = ["#54a4ee", "#bedaf4"];
+
 		d3.json("firms.json", function(error, graph) {
 
 		var nodes = [], links = [];
 		nodes.push({"id":0,"name":"汽车","group":0,"fixed":true,"x":width/2,"y":height/2});
+
+		// init_force(graph, nodes, links);
+
 		for (var i = 0; i < graph.nodes.length; ++i) {
 			nodes.push(graph.nodes[i]);
 			links.push({"source":i+1,"target":0});
@@ -136,40 +149,40 @@ div.comment_detail {
 		  	.style("stroke-width",2);
 
 		var node = svg.selectAll(".node")
-		  .data(nodes)
-		  .enter()
-		  .append("g")
-		  .attr("class", function(d) { return d.id == 0 ? "main_node center_node" : "firm_node"; })
-		  .style("pointer",function(d) { if(d.id != 0) return "cursor"; })
-		  .on("click", function(d) { if(d.id != 0) return brand_display("汽车"); } );
+			.data(nodes)
+			.enter()
+			.append("g")
+			.attr("class", function(d) { return d.id == 0 ? "main_node center_node" : "firm_node"; })
+			.style("pointer",function(d) { if(d.id != 0) return "cursor"; })
+			.on("click", function(d) { if(d.id != 0) return brand_display("汽车"); } );
 
 		var circle = node.append("circle")
-		  .attr("class", "node")
-		  .attr("r",function(d){ 
-		  	if(d.id == 0) {
-		  		return 100;
-		  	} else {
-		  		return Math.sqrt(d.weight*300) + Math.random()*5 + 25;
-		  	} 
-		  })
-		  .style("fill", function(d) { return d.id == 0? color[0] : color[1];; })
-		  .on("mouseenter", function(d){
-		  	if (d.id == 0)
-		  		return;
-		  	d3.select(this).attr("r", 1.2*this.r.baseVal.value);
-		  })
-		  .on("mouseout", function(d) {
-		  	if (d.id == 0)
-		  		return;
-		  	d3.select(this)
-		  		.attr("r", this.r.baseVal.value/1.2);
-		  });
+			.attr("class", "node")
+			.attr("r",function(d){ 
+				if(d.id == 0) {
+					return 100;
+				} else {
+					return Math.sqrt(d.weight*300) + Math.random()*5 + 25;
+				} 
+			})
+			.style("fill", function(d) { return d.id == 0? color[0] : color[1];; })
+			.on("mouseenter", function(d){
+				if (d.id == 0)
+					return;
+				d3.select(this).attr("r", 1.2*this.r.baseVal.value);
+			})
+			.on("mouseout", function(d) {
+				if (d.id == 0)
+					return;
+				d3.select(this)
+					.attr("r", this.r.baseVal.value/1.2);
+			});
 
 		
 		var node_text = node.append("text")
-		  .attr("class","nodetext")
-		  .style("text-anchor", "middle")
-		  .text(function(d) { return d.name; });
+			.attr("class","nodetext")
+			.style("text-anchor", "middle")
+			.text(function(d) { return d.name; });
 
 		var center_node = node[0][0];
 		force.on("tick", function() {
@@ -187,7 +200,6 @@ div.comment_detail {
 				.attr("y2", function(d) { return d.target.y; });
 			force.tick();
 		});
-		
 		});
 
 	};
@@ -262,13 +274,14 @@ div.comment_detail {
 		  });
 
 
-
 		var node_text = node.append("text")
 		  .attr("class","nodetext")
 		  .style("text-anchor", "middle")
 		  .text(function(d) { return d.name; });
 
 		var center_node = node[0][0];
+		
+		// begin father node creation
 		
 		var father_node = $(".center_node").clone(false, true) // deep clone
 				.attr("class", "father_node")
