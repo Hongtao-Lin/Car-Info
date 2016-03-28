@@ -34,7 +34,7 @@ app.configure('production', function(){
 // get mysql running!
 var client = mysql.createConnection({
   user: 'root',
-  password: ''
+  password: '1234'
 });
 client.connect();
 
@@ -43,15 +43,17 @@ client.query('use car', function(err, res, fields) {
   // console.log(res);
 });
 
+
 // Routes 
 app.get('/', routes.index);
 
-app.get('/spec/:id/', function(req, res){
-
+app.get('/spec/:spec/', function(req, res){
+  console.log(req.params.spec);
+  spec = req.params.spec;
   graph = {};
   graph["series"] = {
     "id":0,
-    "name":"testseries",
+    "name":spec,
     "hot":54,
     "good":82,
     "bad":7,
@@ -60,6 +62,7 @@ app.get('/spec/:id/', function(req, res){
   };
   nodes = [];
   node_list = ["space","power","operation","oilwear","comfort","appearance","decoration","costperformance","failure","maintance"];
+  tran_tag={'space': '空间', 'power': '动力', 'operation': '操控', 'oilwear': '油耗', 'comfort': '舒适性', 'appearance': '外观', 'decoration': '内饰', 'costperformance': '性价比','failure': '故障', 'maintance': '保养'};
   var i = 0;
 
   // Note about this for async loop.
@@ -73,7 +76,7 @@ app.get('/spec/:id/', function(req, res){
   function step1(resolve, reject) { 
     async.eachSeries(node_list, 
     function(node, callback){
-      client.query('select * from info where series="testseries" and label="' + node + '";', function(err, data) {
+      client.query('select * from info where spec="' + spec + '" and label="' + node + '" limit 5;', function(err, data) {
         i += 1;
         if (err) { 
           callback(err);
@@ -84,10 +87,10 @@ app.get('/spec/:id/', function(req, res){
         else {
           comments = [];
           for (j in data) {
-            comments.push({"date":data[j].date,"content":data[j].comment,"from":data[j].from,"url":data[j].url});
+            if (data[j].comment != '')
+	      comments.push({"date":data[j].date,"content":data[j].comment,"from":data[j].web,"url":data[j].url});
           };
-          console.log(comments);
-          node_item = {"id":i,"name":node_list[i-1],"group":1,"weight":0,"comments":comments};
+          node_item = {"id":i,"name":tran_tag[node_list[i-1]],"group":1,"weight":0,"comments":comments};
           nodes.push(node_item);
           callback();
         }

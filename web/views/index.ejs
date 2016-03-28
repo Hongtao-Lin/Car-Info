@@ -366,8 +366,11 @@ div.comment_detail {
 		  .on("click", function(d) { 
 		  	if(d.id == 0) return;
 		  	graph = {};
+			name = center_name + d.name.replace(/\s/g, '');
+			url = "/spec/" + name + "/";
+			console.log(url);			
 		  	$.ajax({
-					url: "/spec/1/",
+					url: url,
 					success: function(data) {
 						graph = data;
 					  	return spec_display(center_name, graph); 
@@ -671,18 +674,20 @@ div.comment_detail {
 					}
 					
 					tag_detail.style.display = "block";
-					console.log(2);
+					//console.log(1);
 					tag_detail.getElementsByTagName("h4")[0].innerHTML = d.name;
 					tag_detail.style.left = (d3.select(this)[0][0].__data__.x) + "px";
 					tag_detail.style.top = (d3.select(this)[0][0].__data__.y) + "px";
-		            window.event.cancelBubble = true;
+					comment_detail.scrollTop = 0;
+		            		
 
 				}
 			});
 
 			var g = document.getElementsByTagName("g");
-			for (var i = 1; i < circle[0].length; ++i) {
+			for (var i = 1; i <= circle[0].length; ++i) {
 				g[i].onclick = function(e) {
+					//console.log(2);
 					var ev = e || window.event;
 			        if(ev.stopPropagation){
 			            ev.stopPropagation();
@@ -692,8 +697,21 @@ div.comment_detail {
 			        }
 				}
 			}
+			document.getElementsByClassName("tag_detail")[0].onclick = function(e) {
+				//console.log(3);
+				this.style.display = "block";
+				var ev = e || window.event;
+                                if(ev.stopPropagation){
+                                    ev.stopPropagation();
+                                }
+                                else if(window.event){
+                                    window.event.cancelBubble = true;
+                                }
+
+			};
 			document.getElementsByClassName("cancel_button")[0].onclick = function(e) {
 				this.parentNode.style.display = "none";
+				//console.log(4);
 				var ev = e || window.event;
 		        if(ev.stopPropagation){
 		            ev.stopPropagation();
@@ -703,6 +721,7 @@ div.comment_detail {
 		        }
 			};
 			document.onclick = function() {
+				//console.log(5);
 				var tag_detail = document.getElementsByClassName("tag_detail")[0];
 				if (tag_detail.style.display == "block") 
 					tag_detail.style.display = "none";
