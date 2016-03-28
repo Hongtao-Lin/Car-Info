@@ -147,8 +147,16 @@ div.comment_detail {
 			.on("click", function(d) { 
 				if(d.id == 0) return;
 				// get data from ajax!
-
-				return brand_display("汽车", d.name); 
+				$.ajax({
+					url: "/spec/1/",
+					success: function(data) {
+						console.log(data);
+						return brand_display("汽车", d.name); 
+					},
+					error: function() {
+						console.log("error in ajax");
+					}
+				});
 			});
 
 		var circle = node.append("circle")
@@ -285,7 +293,6 @@ div.comment_detail {
 		var father_node = $(".center_node").clone(false, true) // deep clone
 				.attr("class", "main_node father_node")
 				.attr("transform", "translate(100," + height/2 + ")");
-		console.log(father_node.find("text"));
 		father_node.find("text").text(father_name);
 		father_node.insertAfter($(".center_node"));
 
@@ -404,7 +411,6 @@ div.comment_detail {
 		var father_node = $(".center_node").clone(false, true) // deep clone
 				.attr("class", "firm_node father_node")
 				.attr("transform", "translate(100," + height/2 + ")");
-		console.log(father_node.find("text"));
 		father_node.find("text").text(father_name);
 		father_node.insertAfter($(".center_node"));
 
@@ -594,7 +600,6 @@ div.comment_detail {
 			var father_node = $(".center_node").clone(false, true) // deep clone
 					.attr("class", "brand_node father_node")
 					.attr("transform", "translate(100," + height/2 + ")");
-			console.log(father_node.find("text"));
 			father_node.find("text").text(father_name).attr("class","firm_node father_node");
 			father_node.insertAfter($(".center_node"));
 
@@ -664,7 +669,6 @@ div.comment_detail {
 					}
 					tag_detail.style.display = "block";
 					tag_detail.getElementsByTagName("h4")[0].innerHTML = d.name;
-					console.log(d3.select(this)[0][0].__data__)
 					tag_detail.style.left = (d3.select(this)[0][0].__data__.x) + "px";
 					tag_detail.style.top = (d3.select(this)[0][0].__data__.y) + "px";
 				}

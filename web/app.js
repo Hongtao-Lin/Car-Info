@@ -6,6 +6,7 @@
 var express = require('express')
   , routes = require('./routes')
   , mysql = require('mysql')
+  , async = require('async')
   , partials = require('express-partials')
 
 var app = module.exports = express.createServer();
@@ -33,85 +34,87 @@ app.configure('production', function(){
 // get mysql running!
 var client = mysql.createConnection({
   user: 'root',
-  password: '1234'
+  password: ''
 });
 client.connect();
 
-client.query('use mysql', function(err, res, fields) {
+client.query('use car', function(err, res, fields) {
   if (err) { throw err; }
   // console.log(res);
 });
 
-// graph = {};
-//   graph["series"] = {
-//     "id":0,
-//     "name":req.body,
-//     "hot":54,
-//     "good":82,
-//     "bad":7,
-//     "neutual":11,
-//     "group":0
-//   };
-//   graph["nodes"] = [];
-//   node_list = ["space","power","operation","oilwear","comfort","appearance","decoration","costperformance","failure","maintance"];
-//   for (i in node_list) {
-//     client.query('select * from info where series="' + req.body.series + '" and label="' + node_list[i] + '"', function(err, res, fields) {
-//       if (err) { 
-//         // return to 500 page.
-//         throw err; 
-//       }
-      
-//       comments = [];
-//       for (j in result) {
-//         comments.push({"date":result[j].date,"content":result[j].comment,"from":result[j].from,"url":result[j].url});
-//       };
-//       node = {"id":int(i)+1,"name":node_list[i],"group":1,"weight":0,"comments":comments};
-//       console.log(node);
-//     });
-//   }; 
-// Routes
-
+// Routes 
 app.get('/', routes.index);
 
-// app.get('/', function(req, res){
-//   console.log(1);
-//   res.body = {"series":"testspec"};
-//   console.log(req.body);
-//   graph = {};
-//   graph["series"] = {
-//     "id":0,
-//     "name":req.body,
-//     "hot":54,
-//     "good":82,
-//     "bad":7,
-//     "neutual":11,
-//     "group":0
-//   };
-//   nodes = [];
-//   node_list = ["space","power","operation","oilwear","comfort","appearance","decoration","costperformance","failure","maintance"];
-//   for (i in node_list) {
-//     client.query('select * from info where series="' + req.body.series + '" and label="' + node_list[i] + '"', function(err, res, fields) {
-//       if (err) { 
-//         // return to 500 page.
-//         throw err; 
-//       }
-//       console.log(res);
-      
-//       comments = [];
-//       for (i in res) {
-//         comments.push({"date":res[i].date,"content":res[i].comment,"from":res[i].from,"url":res[i].url});
-//       };
-//       node = {"id":i+1,"name":node_list[i],"group":1,"weight":0,"comments":comments};
-//       nodes.push(node);
-//     });
-//   }; 
-//   graph["nodes"] = nodes;
-//   // then we can access mysql to transform the value into json data.
-//   res.render('visual', {
-//     layout: '',
-//     graph: graph
-//   });
-// });
+app.get('/spec/:id/', function(req, res){
+
+  graph = {};
+  graph["series"] = {
+    "id":0,
+    "name":"testseries",
+    "hot":54,
+    "good":82,
+    "bad":7,
+    "neutual":11,
+    "group":0
+  };
+  nodes = [];
+  node_list = ["space","power","operation","oilwear","comfort","appearance","decoration","costperformance","failure","maintance"];
+  var i = 0;
+
+  // Note about this for async loop.
+  // 1. use async.each / series.
+  // 2. use promise.
+  //    different interface in jquery(not /A+), standard, when.js, then.js, Q, co.
+  //    .then() receive either async / sync. Remember resolve / reject.
+  // 3. use co. iterator and generator.
+  // 4. use 
+
+  function step1(resolve, reject) { 
+    async.eachSeries(node_list, 
+    function(node, callback){
+      client.query('select * from info where series="testseries" and label="' + node + '";', function(err, data) {
+        i += 1;
+        if (err) { 
+          callback(err);
+        } 
+        else if(data.length == 0) {
+          callback();
+        }
+        else {
+          comments = [];
+          for (j in data) {
+            comments.push({"date":data[j].date,"content":data[j].comment,"from":data[j].from,"url":data[j].url});
+          };
+          console.log(comments);
+          node_item = {"id":i,"name":node_list[i-1],"group":1,"weight":0,"comments":comments};
+          nodes.push(node_item);
+          callback();
+        }
+      });
+    },
+    function(err) {
+      if (err) {
+        throw err;
+      }
+      else {
+        graph["nodes"] = nodes;
+        resolve();
+      }
+    }
+    );
+  };
+
+  function step2(resolve, reject) {
+    console.log(graph);
+    res.json(graph);
+  }; 
+
+  new Promise(step1).then(function() {
+    return new Promise(step2);
+  });
+
+});
 
 app.listen(8000, function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

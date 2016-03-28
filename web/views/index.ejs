@@ -147,7 +147,7 @@ div.comment_detail {
 			.on("click", function(d) { 
 				if(d.id == 0) return;
 				// get data from ajax!
-
+				
 				return brand_display("汽车", d.name); 
 			});
 
@@ -285,7 +285,6 @@ div.comment_detail {
 		var father_node = $(".center_node").clone(false, true) // deep clone
 				.attr("class", "main_node father_node")
 				.attr("transform", "translate(100," + height/2 + ")");
-		console.log(father_node.find("text"));
 		father_node.find("text").text(father_name);
 		father_node.insertAfter($(".center_node"));
 
@@ -366,7 +365,18 @@ div.comment_detail {
 		  .style("pointer","cursor")
 		  .on("click", function(d) { 
 		  	if(d.id == 0) return;
-		  	return spec_display(center_name, d.name); 
+		  	graph = {};
+		  	$.ajax({
+					url: "/spec/1/",
+					success: function(data) {
+						graph = data;
+					  	return spec_display(center_name, graph); 
+					},
+					error: function() {
+						console.log("error in ajax");
+						// get to 500 error.
+					}
+				});
 		  });
 
 		var circle = node.append("circle")
@@ -404,7 +414,6 @@ div.comment_detail {
 		var father_node = $(".center_node").clone(false, true) // deep clone
 				.attr("class", "firm_node father_node")
 				.attr("transform", "translate(100," + height/2 + ")");
-		console.log(father_node.find("text"));
 		father_node.find("text").text(father_name);
 		father_node.insertAfter($(".center_node"));
 
@@ -442,11 +451,11 @@ div.comment_detail {
 	//series_display(father_name, center_name);
 
 
-	function spec_display(father_name, center_name) {
+	function spec_display(father_name, center_graph) {
 
 		$("#view").empty();
 		// 0 for center, 1 for good, 2 for bad, 3 for neutral;
-		var color = ["#bedaf4","red","#54a4ee","gray"];
+		var color = ["#54a4ee","red","#bedaf4","gray"];
 		var svg = d3.select("#view").append("svg")
 			.attr("width", width)
 			.attr("height", height);
@@ -480,11 +489,11 @@ div.comment_detail {
 				this.parentNode.appendChild(text);
 			});
 
-
-		d3.json("comment.json", function(error, graph) {
+		graph = center_graph;
+		console.log(graph);
+		// d3.json("comment.json", function(error, graph) {
 			var nodes = [], links = [];
 			var series = graph.series;
-			var father = graph.father;
 			series["fixed"] = true;
 			series["x"] = width/2;
 			series["y"] = height/2;
@@ -571,7 +580,6 @@ div.comment_detail {
 					d.y = d.y + d.r/2 > height ? height - d.r/2 : d.y;
 					return "translate("+d.x+"," + d.y + ")";
 				});
-				// console.log(node.attr("x"))
 				node_text.attr("top", function(d){
 					if (d.id == 0)
 						return;
@@ -594,7 +602,6 @@ div.comment_detail {
 			var father_node = $(".center_node").clone(false, true) // deep clone
 					.attr("class", "brand_node father_node")
 					.attr("transform", "translate(100," + height/2 + ")");
-			console.log(father_node.find("text"));
 			father_node.find("text").text(father_name).attr("class","firm_node father_node");
 			father_node.insertAfter($(".center_node"));
 
@@ -662,11 +669,14 @@ div.comment_detail {
 							comment_item.parentNode.appendChild(comment_tmp);
 						}
 					}
+					
 					tag_detail.style.display = "block";
+					console.log(2);
 					tag_detail.getElementsByTagName("h4")[0].innerHTML = d.name;
-					console.log(d3.select(this)[0][0].__data__)
 					tag_detail.style.left = (d3.select(this)[0][0].__data__.x) + "px";
 					tag_detail.style.top = (d3.select(this)[0][0].__data__.y) + "px";
+		            window.event.cancelBubble = true;
+
 				}
 			});
 
@@ -697,7 +707,8 @@ div.comment_detail {
 				if (tag_detail.style.display == "block") 
 					tag_detail.style.display = "none";
 			};
-	 }); };
+	 	// });
+		};
 		
 </script>
 </html>

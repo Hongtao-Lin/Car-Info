@@ -5,6 +5,8 @@
   , "dependencies": {
       "express": "2.5.8",
       "ejs": "*",
-      "express-partials": "*"
+      "express-partials": "*",
+      "mysql": "*",
+      "async": "*"
   }
 }
