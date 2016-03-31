@@ -34,7 +34,7 @@ app.configure('production', function(){
 // get mysql running!
 var client = mysql.createConnection({
   user: 'root',
-  password: '1234'
+  password: ''
 });
 client.connect();
 

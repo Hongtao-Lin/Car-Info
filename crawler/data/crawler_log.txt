@@ -1,3 +1,0 @@
-Error when crawling page: http://k.autohome.com.cn/spec/23867/index_2.html
-Error when crawling page: http://car.bitauto.com/baoma3xi/koubei/price/71/#topicpinlun
-

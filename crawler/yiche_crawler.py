@@ -25,7 +25,7 @@ def store_comment(web_name, record, raw_comment, file):
 
 	# just a temporary test!
 	record["other"] = raw_comment
-
+	print raw_comment
 	for (key, value) in record.items():
 		file.write("%s: %s\n" % (key, value))
 

@@ -1,6 +1,5 @@
 #coding=utf8
 
-#print ", ".join(seg_list)
 import MySQLdb
 import sys
 import jieba

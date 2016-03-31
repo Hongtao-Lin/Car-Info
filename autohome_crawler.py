@@ -31,6 +31,7 @@ sys.setdefaultencoding('utf8')
 
 
 def store_comment(record, raw_comment, file):
+	print raw_comment
 	raw_date=''
 	# processing raw_comment
 	for tag in split_tag:
@@ -78,7 +79,7 @@ def crawl_basic(url_basic, car_id):
 	configList = r.text.split("config = ")[1].split(";")[0]
 	configList = json.loads(configList)
 	car_name = "".join(configList["result"]["paramtypeitems"][0]["paramitems"][0]["valueitems"][0]["value"].split(" "))
-	file_name = car_name.encode("utf8") + "_basic" + ".txt"
+	file_name = car_name.encode("gb2312") + "_basic" + ".txt"
 	file = open(file_name, 'w')
 
 	# extract basic infomation.
@@ -93,7 +94,6 @@ def crawl_basic(url_basic, car_id):
 	return car_name
 
 def crawl_comment(web_name, brand, series, spec_name, url_base):
-
 
 	log = open("crawler_log.txt", "a")
 	file_name = series + ".txt"
@@ -114,9 +114,7 @@ def crawl_comment(web_name, brand, series, spec_name, url_base):
 			# print url_comment
 		else:
 			flag = 0
-			
 		for item in soup.body.find_all("div", class_="mouthcon"):
-
 			record = copy.copy(comment_dict)
 			record["brand"] = brand
 			record["series"] = series
@@ -128,7 +126,7 @@ def crawl_comment(web_name, brand, series, spec_name, url_base):
 				r = requests.get(item.select(".mouth-main .mouth-item .cont-title .title-name a")[0]["href"])
 			except Exception as e:
 				print e
-                                log.write("Error when crawling page: " + url_comment + "\ 	n Error msg: " + e + "\n\n")
+				log.write("Error when crawling page: " + url_comment + "\ 	n Error msg: " + e + "\n\n")
 
 			soup = BeautifulSoup(r.text, "lxml")
 			# all comments including add-ons.

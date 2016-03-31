@@ -654,7 +654,7 @@ div.comment_detail {
 							comment_tmp = comment_item;
 							from = comment_list[i].from;
 							if (comment_list[i].url) {
-								from = '<a href="' + comment_list[i].url + '">' + comment_list[i].from + '</a>';						
+								from = '<a href="' + comment_list[i].url + '" target="_blank">' + comment_list[i].from + '</a>';						
 							}
 							comment_tmp.getElementsByTagName("span")[0].innerHTML = from;
 							comment_item.getElementsByTagName("span")[1].innerHTML = comment_list[i].date;
