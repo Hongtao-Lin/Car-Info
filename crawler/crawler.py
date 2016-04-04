@@ -21,17 +21,12 @@ for field in comment_field:
 
 # get the pool from sql further.
 url_pool = [
-<<<<<<< HEAD
     # {"web":"autohome", "firm":u"奔驰", "brand":u"北京奔驰", "series":u"奔驰GLC", "url":"http://k.autohome.com.cn/66/", "last_visit":time.clock(), "last_content":""}
-=======
-    {"web":"autohome", "firm":u"奔驰", "brand":u"北京奔驰", "series":u"奔驰GLC", "url":"http://k.autohome.com.cn/66/", "last_visit":time.clock(), "last_content":""}
->>>>>>> bcc5bd2ec1929f4a740ab7eb1ff283a9ea642181
 ]
 
 def get_car_series():
     global url_pool
 
-<<<<<<< HEAD
     #autohome begin
     web = "autohome"
     url_basic = "http://www.autohome.com.cn/grade/carhtml/"
@@ -103,119 +98,6 @@ def get_car_series():
     print "###########"
     print "pcauto cnt: ", cnt
     print "###########"
-    #xgo begin
-    # web = "xgo"
-    # cnt = 0
-    # url_basic = "http://www.xgo.com.cn/brand.html"
-    # r = requests.get(url_basic)
-    # soup = BeautifulSoup(r.text, "lxml")
-    # for firm_item in soup.select("div.main_nr"):
-    #   firm = firm_item.select("div.l a")[-1].text
-    #   for brand_item in firm_item.select("div.r div.car"):
-    #       brand = brand_item.text or firm
-    #       for series_item in brand_item.next_sibling.select("li"):
-    #           series = series_item.dl.dt.text
-    #           url = series_item.dl.dt.a["href"] + "list_s1_p1.html"
-    #           print "series: ", series, "url: ", url
-    #           url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
-    #           cnt += 1
-            
-    # print "###########"
-    # print "xgo cnt: ", cnt
-    # print "###########"
-=======
-    # #autohome begin
-    # web = "autohome"
-    # url_basic = "http://www.autohome.com.cn/grade/carhtml/"
-    # cnt = 0
-    # for i in range(ord("A"), ord("Z")+1):
-    #     url_series = url_basic + chr(i) + ".html"
-    #     r = requests.get(url_series)
-    #     soup = BeautifulSoup(r.text, "lxml")
-    #     for item in soup.find_all("dl"):
-    #         firm = item.dt.div.text
-    #         for brand_item in item.select("div.h3-tit"):
-    #             brand = brand_item.text
-    #             for li in brand_item.next_sibling.next_sibling.select("li"):
-    #                 if li.select("span.text-through") != []:
-    #                     continue
-    #                 if li.select("a") == []:
-    #                     continue
-    #                 series = li.h4.text
-    #                 url = li.select("div")[-1].select("a")[-1]["href"].split("#")[0] + "ge0/0-0-2"
-    #                 print "series: ", series, "url: ", url
-    #                 cnt += 1
-    #                 url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
-    # print "###########"
-    # print "autohome cnt: ", cnt
-    # print "###########"
-    #yiche begin
-    # web = "yiche"
-    # cnt = 0
-    # url_basic = "http://api.car.bitauto.com/CarInfo/MasterBrandToSerialNew.aspx?type=2&pid=0&rt=master&serias=m&key=master"
-    # r = requests.get(url_basic)
-    # brand_list = json.loads(r.text.split('["master"]=')[-1])
-    # for item in brand_list.values():
-    #   firm = item["name"]
-    #   url_series = "http://api.car.bitauto.com/CarInfo/MasterBrandToSerialNew.aspx?type=2&pid=%d&rt=serial&serias=m&key=serial&include=1" % int(item["id"])
-    #   r = requests.get(url_series)
-    #   series_list = json.loads(r.text.split('["serial"]=')[-1])
-    #   for series_item in series_list.values():
-    #       brand = series_item["goname"]
-    #       series = series_item["showName"]
-    #       url = "http://car.bitauto.com/%s/koubei/tags/综合/" % series_item["urlSpell"]
-    #       print "series: ", series, "url: ", url
-    #       url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
-    #       cnt += 1
-            
-    # print "###########"
-    # print "yiche cnt: ", cnt
-    # print "###########"
-    # #pcauto begin
-    # web = "pcauto"
-    # cnt = 0
-    # url_basic = "http://www.pcauto.com.cn/"
-    # r = requests.get(url_basic)
-    # soup = BeautifulSoup(r.text, "lxml")
-    # for brand_item in soup.select("#brand_3 option")[1:]:
-    #   firm = brand_item.text.strip()[2:]
-    #   url_series = "http://price.pcauto.com.cn/interface/5_3/serial_json_chooser.jsp?brand=%d&callback=callback" % int(brand_item.attrs["value"])
-    #   r = requests.get(url_series)
-    #   series_list = json.loads(r.text.split("callback(")[-1][:-2]).values()[0]
-    #   for series_item in series_list:
-    #       if series_item["id"][0] == "+":
-    #           brand = series_item["text"]
-    #           continue
-    #       series = series_item["text"]
-    #       url = "http://price.pcauto.com.cn/comment/sg%d/t1/p1.html" % int(series_item["id"])
-    #       print "series: ", series, "url: ", url
-    #       url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
-    #       cnt += 1
-            
-    # print "###########"
-    # print "pcauto cnt: ", cnt
-    # print "###########"
-    #xgo begin
-    web = "xgo"
-    cnt = 0
-    url_basic = "http://www.xgo.com.cn/brand.html"
-    r = requests.get(url_basic)
-    soup = BeautifulSoup(r.text, "lxml")
-    for firm_item in soup.select("div.main_nr"):
-      firm = firm_item.select("div.l a")[-1].text
-      for brand_item in firm_item.select("div.r div.car"):
-          brand = brand_item.text or firm
-          for series_item in brand_item.next_sibling.select("li"):
-              series = series_item.dl.dt.text
-              url = series_item.dl.dt.a["href"] + "list_s1_p1.html"
-              print "series: ", series, "url: ", url
-              url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
-              cnt += 1
-            
-    print "###########"
-    print "xgo cnt: ", cnt
-    print "###########"
->>>>>>> bcc5bd2ec1929f4a740ab7eb1ff283a9ea642181
     # #sohu begin
     # web = "sohu"
     # cnt = 0
@@ -251,7 +133,6 @@ def store_comment(web_name, record, raw_comment, file):
         raw_date=''
         for tag in split_tag:
             if len(raw_comment.split(tag))!=1 :
-<<<<<<< HEAD
                 record[tran_tag[tag]] = raw_comment.split(tag)[1].split('【')[0].strip()
             else:
                 record[tran_tag[tag]] = ""
@@ -259,17 +140,6 @@ def store_comment(web_name, record, raw_comment, file):
     else:
         # just a temporary test!
         record["other"] = raw_comment
-=======
-                record[tran_tag[tag]]+=raw_comment.split(tag)[1].split('【')[0]
-                #print record[tran_tag[tag]]
-    else:
-        # just a temporary test!
-        record["other"] = raw_comment
-
-    for (key, value) in record.items():
-        file.write("%s: %s\n" % (key, value))
-
->>>>>>> bcc5bd2ec1929f4a740ab7eb1ff283a9ea642181
     # store it in sql.
     T=[]
     i=0
@@ -280,11 +150,7 @@ def store_comment(web_name, record, raw_comment, file):
             i+=1
         
     try:
-<<<<<<< HEAD
         conn=MySQLdb.connect(host='127.0.0.1',user='root',passwd='1234',db='mysql',port=3306)
-=======
-        conn=MySQLdb.connect(host='127.0.0.1',user='root',passwd='',db='car',port=3306)
->>>>>>> bcc5bd2ec1929f4a740ab7eb1ff283a9ea642181
         cur=conn.cursor()
 
         conn.set_character_set('utf8')
@@ -338,7 +204,6 @@ def autohome_crawler(brand, series, url_base, last_visit, last_content):
     page_num = 1
     url_comment = url_base
     while(flag):
-<<<<<<< HEAD
         r = requests.get(url_comment)
         soup = BeautifulSoup(r.text)
         for item in soup.body.find_all("div", class_="mouthcon"):
@@ -398,66 +263,6 @@ def autohome_crawler(brand, series, url_base, last_visit, last_content):
             except Exception as e:
               print e
               log.write("Error when crawling page: " + str(url_comment) + "\n")
-=======
-        # print url_comment
-        r = requests.get(url_comment)
-        soup = BeautifulSoup(r.text)
-        # print r.text
-        # print r.text.find("supportNumber")
-        with open("test2.txt", 'w') as f:
-            f.write(r.text)
-        for item in soup.body.find_all("div", class_="mouthcon"):
-            # if not is_new:
-            #   break
-            print item
-            record = copy.copy(comment_dict)
-            record["brand"] = brand
-            record["series"] = series
-            record["spec"] = "".join(item.select("div.mouthcon-cont-left dl.choose-dl dd")[0].text.split())
-            record["web"] = web_name
-            record["url"] = item.select(".mouth-main .mouth-item .cont-title .title-name a")[0]["href"]
-            # get the specific comment page.
-            # try:
-            main_comment = item.select(".mouth-main .mouth-item .text-con")[0].text.strip()
-
-            # write additional info
-            
-            record["upvote"] = upvote = item.select(".mouth-main .mouth-remak label.supportNumber")[0].text
-            record["respond"] = respond = item.select(".mouth-main .mouth-remak span.CommentNumber")[0].text
-            print "upvote is " + upvote
-            print "respond is " + respond
-            comment_date = item.select(".mouth-main .mouth-item .title-name b")[-1].text.strip()
-            print "date: ", comment_date
-            # if there are no add-ons, do not need to follow on.
-            if item.select("dl.add-dl") != []:
-                r = requests.get(record["url"])
-                print record["url"]
-                soup2 = BeautifulSoup(r.text, "lxml")
-                add_on_comments = soup2.select(".mouth-main .mouth-item")[:-1]
-
-                for item2 in add_on_comments:
-                    if item2.select("dd.add-dl-text") == []:
-                        continue
-                    add_on_comment = item2.select("dd.add-dl-text")[0].text.strip()
-                    record["date"] = item2.select("div.title-name b")[0].text.strip() 
-                    cur_content = hash(add_on_comment)
-                    if cur_content == last_content:
-                        is_new = 0
-                        break
-                    store_comment(web_name, record, add_on_comment, file)
-
-            record["date"] = comment_date
-            cur_content = hash(main_comment)
-            if cur_content == last_content:
-                is_new = 0
-                break
-            cnt += 1
-            store_comment(web_name, record, main_comment, file)
-            
-            # except Exception as e:
-            #   print e
-            #   log.write("Error when crawling page: " + str(url_comment) + "\n")
->>>>>>> bcc5bd2ec1929f4a740ab7eb1ff283a9ea642181
         
         page_next = soup.body.find_all("a", class_="page-item-next")
         # Get next page.
@@ -487,7 +292,6 @@ def yiche_crawler(brand, series, url_base, last_visit, last_content):
         
         # Find comments from a specific user.
         for item in soup.body.find_all("div", id="topiclistshow")[0].find_all("dl"):
-<<<<<<< HEAD
             try:
                 spec_name = series + "".join(item.select("p.carname")[0].text.split())
                 url_comment_list = item.find_all("ul", class_="cont_list")[0].find_all("li")
@@ -544,64 +348,6 @@ def yiche_crawler(brand, series, url_base, last_visit, last_content):
               print url_comment.a.get("href")
               print e
               log.write("Error when crawling page: " + url_comment.a.get("href") + "\n\n")
-=======
-            # try:
-            spec_name = series + "".join(item.select("p.carname")[0].text.split())
-            url_comment_list = item.find_all("ul", class_="cont_list")[0].find_all("li")
-
-            # One user may have several comments.
-            for url_comment in url_comment_list:
-                record = copy.copy(comment_dict)
-                record["brand"] = brand
-                record["series"] = series
-                record["spec"] = spec_name
-                record["web"] = web_name
-                record["url"] = url_comment.a.get("href")
-                
-                r = requests.get(record["url"])
-                print url_comment.a.get("href")
-                soup = BeautifulSoup(r.text, "lxml")
-
-                # filter some special comments.
-                if soup.select("span.fapiao_tab") != []:
-                    continue
-
-                comment = soup.select("div#content_bit div.article-contents")[0]
-                
-                record["respond"] = respond = url_comment.select("div.rbox")[0].a.span.text[3:-1].strip()
-                record["upvote"] = upvote = url_comment.select("div.rbox em")[-1].text[1:-1].strip()
-                record["date"] = date = soup.select("#time")[0].text.strip()
-                print "respond is: %s" % respond
-                print "upvote is: %s" % upvote
-                print "date is: %s" % date 
-
-                if comment.select("p.czjg_xq_cont") != []: # which means that comment is not valid.
-                    continue
-                # pre-process the text for convenience.
-                for tag in comment.find_all("strong"):
-                    if not tag.string:
-                        continue
-                    tag.string = u"【" + tag.string.strip() + u"】"
-                    # print tag.text
-                for p in comment.find_all("p"):
-                    if not p.string:
-                        continue
-                    p.string = p.string.strip()
-                # Here we clean some data.
-                if comment.h4:
-                    comment.h4.extract()
-                if comment.pre:
-                    comment.pre.extract()
-                if comment.find("div.con_nav2"):
-                    comment.find("duv.con_nav2").extract()
-
-                store_comment(web_name, record, comment.text.strip(), file)
-
-            # except Exception as e:
-            #   print url_comment.a.get("href")
-            #   print e
-            #   log.write("Error when crawling page: " + url_comment.a.get("href") + "\n\n")
->>>>>>> bcc5bd2ec1929f4a740ab7eb1ff283a9ea642181
 
         page_all = soup.body.find_all("span", id_="main_pager_down")
         if (page_all != [] and page_all[0].find_all("a", class_="next_on") != []):
@@ -646,39 +392,17 @@ def pcauto_crawler(brand, series, url_base, last_visit, last_content):
             print "date is: %s" % date
             print "upvote is: %s" % upvote
             
-<<<<<<< HEAD
             for tag in comment.find_all("strong"):
                 tag.string = u"【" + tag.string[0:-1] + u"】"
-=======
-            respond_script = item.select("div.corners script")[-1].text.strip()
-            respond_url_pre = respond_script.split("(")[1].split(",")[0].strip()[1:-2] 
-            respond_url_next = respond_script.split(",")[1].strip()[1:-1]
-            #r = requests.get(respond_url_pre + "&" + respond_url_next)
-            #print respond_url_pre + "&" + respond_url_next
-            #record["respond"] = respond = json.dumps(requests.get(respond_url_pre + "&" + respond_url_next).text).total
-            #print "respond is: %s" % respond
-
-            for tag in comment.find_all("strong"):
-                tag.string = u"【" + tag.string[0:-1] + u"】"
-            print "comment is: ", comment.text.strip()
->>>>>>> bcc5bd2ec1929f4a740ab7eb1ff283a9ea642181
             store_comment(web_name, record, comment.text.strip(), file)
 
             for add_on in item.select("div.zjdp"):
                 # note that this date is additional on original one!! e.g.: 2014-10-23 + 56 = 2014-11-23 + 26 (day!)
-<<<<<<< HEAD
                 add_date = item.select("span.sp2")[0].text.strip()[6:-3]
                 # need to convert it!
                 # record["date"] = ...
                 print "additional_date: %s" % add_date
                 store_comment(web_name, record, add_on.select("div.zjdp_text")[0].text.strip(), file)
-=======
-                add_date = item.select("div.sp2")[0].text.strip()[6:-3]
-                # need to convert it!
-                # record["date"] = ...
-                print "additional_date: %s" % add_date
-                store_comment(web_name, record, add_on.select("div.zjdp_text").text.strip(), file)
->>>>>>> bcc5bd2ec1929f4a740ab7eb1ff283a9ea642181
                 # file.write("add-on: " + add_on.select("div.zjdp_text").text  + "\n")
 
             # except Exception as e:
@@ -693,13 +417,8 @@ def pcauto_crawler(brand, series, url_base, last_visit, last_content):
         else:
             flag = 0
 
-<<<<<<< HEAD
     file.close()
     log.close()
-=======
-        file.close()
-        log.close()
->>>>>>> bcc5bd2ec1929f4a740ab7eb1ff283a9ea642181
 
 def xgo_crawler(brand, series, url_base, last_visit, last_content):
     log = open("crawler_log.txt", "a")
@@ -894,7 +613,6 @@ def main():
     os.chdir("data/")
 
     # get all series!
-<<<<<<< HEAD
     # if not os.path.exists("url_pool.txt"):
     #     url_pool = get_car_series()
     #     with open("url_pool.txt", "w") as f:
@@ -903,10 +621,6 @@ def main():
     # else:
     #     f = open("url_pool.txt", "r")
     #     url_pool = json.load(f)
-
-=======
-    # url_pool = get_car_series()
->>>>>>> bcc5bd2ec1929f4a740ab7eb1ff283a9ea642181
 
     # get all car lists & crawl basic!
     # url_series = "http://car.autohome.com.cn/config/series/66.html"
