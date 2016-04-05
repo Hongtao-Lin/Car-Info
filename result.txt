@@ -72,3 +72,17 @@ Bayes with m and num 8000:
 0.7683
 Bayes with m and num 8000: 
 0.7466
+C = 500, kernel = rbf with num 4000 
+0.741
+C = 500, kernel = rbf with num 8000 
+0.7785
+C = 500, kernel = rbf with num 20000 
+0.7798
+C = 1, kernel = rbf with num 4000 
+0.145
+C = 1, kernel = rbf with num 12000 
+0.302
+C = 5, kernel = rbf with num 4000 
+0.443
+C = 5, kernel = rbf with num 12000 
+0.687666666667

@@ -21,7 +21,7 @@ for field in comment_field:
 
 # get the pool from sql further.
 url_pool = [
-    # {"web":"autohome", "firm":u"奔驰", "brand":u"北京奔驰", "series":u"奔驰GLC", "url":"http://k.autohome.com.cn/66/", "last_visit":time.clock(), "last_content":""}
+    {"web":"netease", "firm":u"奔驰", "brand":u"北京奔驰", "series":u"奔驰GLC", "url":"http://product.auto.163.com/opinion_more/1990/1_1.html", "last_visit":time.clock(), "last_content":""}
 ]
 
 def get_car_series():
@@ -143,31 +143,32 @@ def store_comment(web_name, record, raw_comment, file):
     # store it in sql.
     T=[]
     i=0
+    print 1
     for (key, value) in record.items():
         file.write("%s: %s\n" % (key, value))
         if i<21:
             T.append(value)
             i+=1
         
-    try:
-        conn=MySQLdb.connect(host='127.0.0.1',user='root',passwd='1234',db='mysql',port=3306)
-        cur=conn.cursor()
+    # try:
+    #     conn=MySQLdb.connect(host='127.0.0.1',user='root',passwd='1234',db='mysql',port=3306)
+    #     cur=conn.cursor()
 
-        conn.set_character_set('utf8')
+    #     conn.set_character_set('utf8')
 
-        cur.execute('SET NAMES utf8;')
-        cur.execute('SET CHARACTER SET utf8;')
-        cur.execute('SET character_set_connection=utf8;')
+    #     cur.execute('SET NAMES utf8;')
+    #     cur.execute('SET CHARACTER SET utf8;')
+    #     cur.execute('SET character_set_connection=utf8;')
 
-        sql='insert into comments values(%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s , %s);'
+    #     sql='insert into comments values(%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s , %s);'
 
-        cur.execute(sql,T)
+    #     cur.execute(sql,T)
         
-        cur.close()
-        conn.commit()
-        conn.close()
-    except MySQLdb.Error,e:
-        print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+    #     cur.close()
+    #     conn.commit()
+    #     conn.close()
+    # except MySQLdb.Error,e:
+    #     print "Mysql Error %d: %s" % (e.args[0], e.args[1])
 
     return
 
@@ -289,7 +290,6 @@ def yiche_crawler(brand, series, url_base, last_visit, last_content):
     while(flag):
         r = requests.get(url_comments)
         soup = BeautifulSoup(r.text, "lxml")
-        
         # Find comments from a specific user.
         for item in soup.body.find_all("div", id="topiclistshow")[0].find_all("dl"):
             try:
@@ -307,17 +307,17 @@ def yiche_crawler(brand, series, url_base, last_visit, last_content):
                     
                     r = requests.get(record["url"])
                     print url_comment.a.get("href")
-                    soup = BeautifulSoup(r.text, "lxml")
+                    soup2 = BeautifulSoup(r.text, "lxml")
 
                     # filter some special comments.
-                    if soup.select("span.fapiao_tab") != []:
+                    if soup2.select("span.fapiao_tab") != []:
                         continue
 
-                    comment = soup.select("div#content_bit div.article-contents")[0]
+                    comment = soup2.select("div#content_bit div.article-contents")[0]
                     
                     record["respond"] = respond = url_comment.select("div.rbox")[0].a.span.text[3:-1].strip()
                     record["upvote"] = upvote = url_comment.select("div.rbox em")[-1].text[1:-1].strip()
-                    record["date"] = date = soup.select("#time")[0].text.strip()
+                    record["date"] = date = soup2.select("#time")[0].text.strip()
                     print "respond is: %s" % respond
                     print "upvote is: %s" % upvote
                     print "date is: %s" % date 
@@ -349,7 +349,8 @@ def yiche_crawler(brand, series, url_base, last_visit, last_content):
               print e
               log.write("Error when crawling page: " + url_comment.a.get("href") + "\n\n")
 
-        page_all = soup.body.find_all("span", id_="main_pager_down")
+        page_all = soup.body.select("#main_pager_down")
+        # print page_all
         if (page_all != [] and page_all[0].find_all("a", class_="next_on") != []):
             page_num += 1
             url_comments = url_base + "page" + str(page_num)
@@ -574,8 +575,8 @@ def netease_crawler(brand, series, url_base, last_visit, last_content):
             print "url is: ", record["url"]
 
             r = requests.get(record["url"])
-            soup = BeautifulSoup(r.text, "lxml")
-            content = soup.select("div.d3").text[0].strip()
+            soup2 = BeautifulSoup(r.text, "lxml")
+            content = soup2.select("div.d3")[0].text.strip()
             print "comment is: ", content
 
             record["respond"] = respond = item.select("li.reply")[0].text[3:-1]

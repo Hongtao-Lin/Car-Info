@@ -252,7 +252,7 @@ def svm_train(C, kernel, ratio):
 		train = json.load(f1)
 	with open("test.json") as f2:
 		test = json.load(f2)
-
+	print "load data complete"
 	clf = SVC(C = C, kernel = kernel)
 
 	train_len = int(ratio*len(train["y"]))
@@ -261,7 +261,7 @@ def svm_train(C, kernel, ratio):
 	train_y = train["y"][:train_len]
 	test_x = test["x"][:test_len]
 	test_y = test["y"][:test_len]
-	clf.fit(test_x, train_y)
+	clf.fit(train_x, train_y)
 	pred_y = clf.predict(test_x)
 	err_num = np.count_nonzero(pred_y - test_y)
 	acc = float(test_len- err_num) / test_len
@@ -272,55 +272,16 @@ def svm_train(C, kernel, ratio):
 		f.close()
 	print acc
 
-def dump_json_data():
-	print "dump json data..."
-	i = 0
-	num = 0
-	prog = 0
-	json_data = {}
-	sql = 'select comment, label from car.info %s;' % limitation
-	train_num = cur.execute(sql)
-	print "total number of data: %d" % train_num
-
-	result = cur.fetchall()
-	train_x = np.zeros([train_num, len(word_dic.keys())], dtype=int)
-	train_y = np.zeros([train_num], dtype=int)
-	null_seg = 0
-	for r in result:
-		if num >= train_num*prog/100:
-			print "processing %d%% ..." % prog
-			prog += 1
-		num += 1 
-		seg_list = jieba.cut(r[0].decode("utf-8"))
-		if seg_list == []:
-			null_seg += 1
-			continue
-		for seg in seg_list:
-			if seg in stopwords:
-				continue
-			if seg not in word_dic:
-				continue
-			train_x[i][word_dic[seg]] += 1
-		train_y[i] = tag_dic[r[1]]
-		i += 1
-	train_x = np.delete(train_x, np.s_[i:], 0)
-	train_y = np.delete(train_y, np.s_[i:], 0)
-	print "null seg: ", null_seg
-	print "remain number: ", len(train_x)
-	np.savez("train_data_m.npz", x = train_x, y = train_y)
-	print "train data complete"
-
-
 # get_train_data()
 # get_test_data()
 # init_dump()
 # dump_train_data()
 # dump_test_data()
-bayes_train("m", 0.2)
-# for C in [500]:
-# 	for kernel in ["rbf"]:
-# 		for ratio in [0.1, 0.2, 0.5]:
-# 			svm_train(C, kernel, ratio)
+# bayes_train("m", 0.2)
+for C in [1, 5]:
+	for kernel in ["rbf"]:
+		for ratio in [0.1, 0.3]:
+			svm_train(C, kernel, ratio)
 
 cur.close()
 conn.close()
