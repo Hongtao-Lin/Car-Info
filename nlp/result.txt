@@ -1,0 +1,178 @@
+# for data = (4000, 1000) -> (20000+, 5700)
+C = 500, kernel = rbf 
+0.773116089613
+C = 500, kernel = linear 
+0.726883910387
+C = 1000, kernel = rbf 
+0.77617107943
+C = 1000, kernel = linear 
+0.726680244399
+C = 5000, kernel = rbf 
+0.764562118126
+C = 5000, kernel = linear 
+0.725458248473
+Multinomial Bayes
+0.795315682281
+Bernoulli Bayes
+0.737474541752
+My version of Bayes:
+0.7682
+
+# for data = (16000, 4000) -> (100000 , 20000)
+Bernoulli Bayes
+0.799070907142
+Multinomiak Bayes
+0.8410332329370.738625571959
+C = 100, kernel = rbf 
+0.812394711318
+C = 500, kernel = rbf 
+0.832712236459
+C = 1000, kernel = rbf 
+0.834754198785
+
+Bayes with b and num 260: 
+0.514705882353
+Bayes with b and num 520: 
+0.669117647059
+Bayes with b and num 1300: 
+0.709677419355
+Bayes with b and num 2600: 
+0.756954612006
+Bayes with m and num 260: 
+0.676470588235
+Bayes with m and num 520: 
+0.757352941176
+Bayes with m and num 1300: 
+0.794721407625
+Bayes with m and num 2600: 
+0.803806734993
+
+# another test
+Bayes with b and num 4000: 
+0.73
+Bayes with b and num 8000: 
+0.757
+Bayes with b and num 20000: 
+0.7658
+Bayes with b and num 40000: 
+0.7493
+Bayes with m and num 4000: 
+0.787
+Bayes with m and num 8000: 
+0.8275
+Bayes with m and num 20000: 
+0.8136
+Bayes with m and num 40000: 
+0.7931
+
+
+# if use this setting to predict more data...
+# note that the data is not randomly distributed.  
+Bayes with m and num 8000: 
+0.7683
+Bayes with m and num 8000: 
+0.7466
+C = 500, kernel = rbf with num 4000 
+0.741
+C = 500, kernel = rbf with num 8000 
+0.7785
+C = 500, kernel = rbf with num 20000 
+0.7798
+C = 1, kernel = rbf with num 4000 
+0.145
+C = 1, kernel = rbf with num 12000 
+0.302
+C = 5, kernel = rbf with num 4000 
+0.443
+C = 5, kernel = rbf with num 12000 
+0.687666666667
+
+
+Bayes with m and num 2880: 
+0.698611111111
+Bayes with m and num 5760: 
+0.783333333333
+Bayes with m and num 14400: 
+0.821944444444
+Bayes with m and num 28800: 
+0.85375
+Bayes with b and num 2880: 
+0.352777777778
+Bayes with b and num 5760: 
+0.715972222222
+Bayes with b and num 14400: 
+0.778888888889
+Bayes with b and num 28800: 
+0.787222222222
+C = 1, kernel = rbf with num 2880 
+0.144444444444
+C = 1, kernel = rbf with num 5760 
+0.152083333333
+C = 1, kernel = rbf with num 14400 
+0.141111111111
+C = 5, kernel = rbf with num 2880 
+0.15
+C = 5, kernel = rbf with num 5760 
+0.18125
+C = 5, kernel = rbf with num 14400 
+0.337222222222
+C = 100, kernel = rbf with num 2880 
+0.6625
+C = 100, kernel = rbf with num 5760 
+0.710416666667
+C = 100, kernel = rbf with num 14400 
+0.744166666667
+C = 500, kernel = rbf with num 2880 
+0.719444444444
+C = 500, kernel = rbf with num 5760 
+0.772916666667
+C = 500, kernel = rbf with num 14400 
+0.784166666667
+C = 800, kernel = rbf with num 2880 
+0.716666666667
+C = 800, kernel = rbf with num 5760 
+0.778472222222
+C = 800, kernel = rbf with num 14400 
+0.790833333333
+C = 1500, kernel = rbf with num 14400 
+0.7925
+C = 5000, kernel = rbf with num 14400 
+0.790277777778
+
+
+Bayes with m and num 2400: 
+0.696666666667
+Bayes with m and num 4800: 
+0.794166666667
+Bayes with m and num 12000: 
+0.828666666667
+Bayes with m and num 24000: 
+0.855666666667
+Bayes with b and num 2400: 
+0.32
+Bayes with b and num 4800: 
+0.723333333333
+Bayes with b and num 12000: 
+0.764666666667
+
+
+Bayes with m and num 2400: 
+0.698333333333
+Bayes with m and num 4800: 
+0.796666666667
+Bayes with m and num 2400: 
+0.778333333333
+Bayes with m and num 4800: 
+0.831666666667
+Bayes with m and num 12000: 
+0.857666666667
+Bayes with m and num 24000: 
+0.875833333333
+Bayes with b and num 2400: 
+0.735
+Bayes with b and num 4800: 
+0.78
+Bayes with b and num 12000: 
+0.788333333333
+Bayes with b and num 24000: 
+0.822333333333

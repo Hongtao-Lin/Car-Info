@@ -1,0 +1,165 @@
+
+predict: oilwear
+true: space
+http://k.autohome.com.cn/spec/19462/view_660975_1.html?st=5&piap=0|2951|0|0|2|0|0|0|0|0|1
+有点小，在可以接受的范围，不知道会不会改款
+
+predict: space
+true: comfort
+http://k.autohome.com.cn/spec/18104/view_910088_1.html?st=2&piap=0|18|0|0|2|0|0|0|0|0|1
+各方面都不错，座椅舒适的可以跟天籁这移动沙发媲美了。后排舒适度比较高，腿部空间头部空间很充裕，坐在后排是一种享受。不得不说A6l的确是老板车，为后排乘客提供足够的舒适性。前排的舒适度有所欠缺，悬架比较适宜平时家用开 静音方面蛮好的 怠速时噪音有点大 在车内就听不太出来 高速时静音控制很不错
+
+predict: decoration
+true: costperformance
+http://k.autohome.com.cn/spec/23925/view_1043770_1.html?st=2&piap=0|692|0|0|2|0|0|0|0|0|1
+相当不错
+
+predict: power
+true: decoration
+http://k.autohome.com.cn/spec/985/view_834761_1.html?st=5&piap=0|509|0|0|2|0|0|0|0|0|1
+还是相对豪华的，该有的都有，很够用
+
+predict: power
+true: operation
+http://k.autohome.com.cn/spec/24355/view_951466_1.html?st=1&piap=0|2097|0|0|2|0|0|0|0|0|1
+满分！
+
+predict: space
+true: oilwear
+http://k.autohome.com.cn/spec/17378/view_561493_1.html?st=4&piap=0|266|0|0|2|0|0|0|0|0|1
+无所谓了，就是感觉油箱有点小了
+
+predict: space
+true: appearance
+http://k.autohome.com.cn/spec/17056/view_1023919_1.html?st=4&piap=0|650|0|0|2|0|0|0|0|0|1
+满意。
+
+predict: comfort
+true: appearance
+http://k.autohome.com.cn/spec/18973/view_1042570_1.html?st=4&piap=0|2951|0|0|2|0|0|0|0|0|1
+没有什么多说的很满意
+
+predict: costperformance
+true: decoration
+http://k.autohome.com.cn/spec/17378/view_561493_1.html?st=4&piap=0|266|0|0|2|0|0|0|0|0|1
+对得起价格，很有质感
+
+predict: costperformance
+true: decoration
+http://k.autohome.com.cn/spec/3626/view_1014506_1.html?st=1&piap=0|19|0|0|2|0|0|0|0|0|1
+简约、方便、该有的都有，90分。
+
+predict: costperformance
+true: comfort
+http://k.autohome.com.cn/spec/985/view_834761_1.html?st=5&piap=0|509|0|0|2|0|0|0|0|0|1
+相对当时来说还是不错的。
+
+predict: space
+true: comfort
+http://k.autohome.com.cn/spec/19462/view_660975_1.html?st=5&piap=0|2951|0|0|2|0|0|0|0|0|1
+可以，在里面感觉非常舒服，后排做3个人也没有太大的压力，感觉完全可以接受
+
+predict: decoration
+true: comfort
+http://k.autohome.com.cn/spec/24830/view_1043519_1.html?st=3&piap=0|692|0|0|2|0|0|0|0|0|1
+还行
+
+predict: decoration
+true: comfort
+http://k.autohome.com.cn/spec/22884/view_937583_1.html?st=4&piap=0|3170|0|0|2|0|0|0|0|0|1
+A3的底盘有些硬哦，过减速带很难受，所以一点记得减速，不知道是不是论坛上说的那个固定器没有拿掉。座椅也非常一般，织物的做工让人很无语，和奥迪这个品牌不搭哦，自己后来又加了个皮套上去。
+
+predict: power
+true: comfort
+http://k.autohome.com.cn/spec/15427/view_1044106_1.html?st=1&piap=0|2730|0|0|2|0|0|0|0|0|1
+座椅非常舒服 ，有腰部支撑 ，做着一拐弯，非常带派哈哈??
+
+predict: decoration
+true: operation
+http://k.autohome.com.cn/spec/1527/view_953002_1.html?st=2&piap=0|19|0|0|2|0|0|0|0|0|1
+不错
+
+predict: operation
+true: comfort
+http://k.autohome.com.cn/spec/17378/view_561493_1.html?st=4&piap=0|266|0|0|2|0|0|0|0|0|1
+超跑中应该还算不错的
+
+predict: appearance
+true: costperformance
+http://k.autohome.com.cn/spec/18643/view_578119_1.html?st=3&piap=0|370|0|0|2|0|0|0|0|0|1
+只能说中等，甚至偏下；但是凡是买东西还要取决于喜欢与否，喜欢自然愿意买单。
+
+predict: appearance
+true: operation
+http://k.autohome.com.cn/spec/17378/view_561493_1.html?st=4&piap=0|266|0|0|2|0|0|0|0|0|1
+非常给力
+
+predict: appearance
+true: costperformance
+http://k.autohome.com.cn/spec/19830/view_783523_1.html?st=2&piap=0|923|0|0|2|0|0|0|0|0|1
+着实不太高
+
+predict: appearance
+true: maintenance
+http://k.autohome.com.cn/spec/14309/view_161635_1.html?st=4&piap=0|370|0|0|2|0|0|0|0|0|1
+家里有四台四台车，唯独奥迪最贵。仔细看过发现，奥迪的材料费其实还好，工时费真的很坑，换个机油滤芯80，清洁天窗200，其它的没仔细看，每次小保养没低过1700还是加的半合成油。其实奥迪真的让我比较失望，以后再买车不会看奥迪了。
+
+predict: maintenance
+true: costperformance
+http://k.autohome.com.cn/spec/19462/view_660975_1.html?st=5&piap=0|2951|0|0|2|0|0|0|0|0|1
+值得去买，不会后悔的，感觉挺超值的
+
+predict: decoration
+true: operation
+http://k.autohome.com.cn/spec/985/view_834761_1.html?st=5&piap=0|509|0|0|2|0|0|0|0|0|1
+还可以啊都挺稳定的，奥迪这方面一直都很不错
+
+predict: power
+true: appearance
+http://k.autohome.com.cn/spec/24080/view_942432_1.html?st=2&piap=0|812|0|0|2|0|0|0|0|0|1
+前后车灯是亮点，车身360度没有死角，整体感觉车身还是不大气，本来订的路虎发现神行年前没有货，急促之下就买了一台Q5，路虎，下次吧！
+
+predict: decoration
+true: operation
+http://k.autohome.com.cn/spec/1398/view_901724_1.html?st=5&piap=0|19|0|0|2|0|0|0|0|0|1
+还算可以
+
+predict: comfort
+true: costperformance
+http://k.autohome.com.cn/spec/24990/view_1043763_1.html?st=3&piap=0|2951|0|0|2|0|0|0|0|0|1
+整体来说还可以，只是一些功能还欠缺开发，这个价位来说不算完美
+
+predict: space
+true: costperformance
+http://k.autohome.com.cn/spec/24079/view_1043391_1.html?st=5&piap=0|812|0|0|2|0|0|0|0|0|1
+今年入手Q5完全合适了，明年改款了
+
+predict: power
+true: failure
+http://k.autohome.com.cn/spec/14309/view_161635_1.html?st=4&piap=0|370|0|0|2|0|0|0|0|0|1
+3000公里喇叭坏了，去4儿子索赔了，看了价格标的800多。。嘿嘿，坑。然后就是双离合变速箱10000公里后出现抖动，现在只要急加速就是抖，去4儿子那里也是去了无数次，升级也升了，变速箱油也换了，都还是那样。售后的跟我说，奥迪的这个变速箱修不好，不如你先开着，开到很严重时再给你换个新的。我听到好感动，奥迪的服务太感人了。质量太给力了！给我再选一次，我一定不选你。
+
+predict: operation
+true: appearance
+http://k.autohome.com.cn/spec/329/view_949632_1.html?st=3&piap=0|19|0|0|2|0|0|0|0|0|1
+老款耐看，不过时
+
+predict: oilwear
+true: power
+http://k.autohome.com.cn/spec/18320/view_997927_1.html?st=1&piap=0|471|0|0|2|0|0|0|0|0|1
+现在城市通常堵车，350牛米的扭矩完全胜任各种走走停停，尤其是在高速特别安逸，220匹。。。
+
+predict: appearance
+true: decoration
+http://k.autohome.com.cn/spec/19830/view_783523_1.html?st=2&piap=0|923|0|0|2|0|0|0|0|0|1
+有点老，设计没亮点
+
+predict: comfort
+true: power
+http://k.autohome.com.cn/spec/19462/view_660975_1.html?st=5&piap=0|2951|0|0|2|0|0|0|0|0|1
+强劲，超车的时候完全没有压力，非常给力
+
+predict: power
+true: appearance
+http://k.autohome.com.cn/spec/21573/view_1042003_1.html?st=1&piap=0|370|0|0|2|0|0|0|0|0|1
+初看不咋样，细看会越来越爱，给个满分！最爱战斧！

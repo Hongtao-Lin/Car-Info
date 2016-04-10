@@ -11,16 +11,21 @@ import copy, collections, datetime, MySQLdb
 reload(sys) 
 sys.setdefaultencoding('utf8')   
 
-comment_field = ["brand", "series", "spec", "dateNtime", "web", "url", "space", "power", "operation", "oilwear", "comfort", "appearance", "decoration", "costperformance", "upvote", "downvote", "respond"]
+score_field = ["brand", "series", "spec", "date", "web", "url", "space", "power", "operation", "oilwear", "comfort", "appearance", "decoration", "costperformance", "upvote", "downvote", "respond"]
+spec_field = ["brand", "series", "spec", "web", "url", "total_score", "space", "power", "operation", "oilwear", "comfort", "appearance", "decoration", "costperformance"]
 split_tag = ["【最满意的一点】", "【最不满意的一点】", "【空间】","【动力】","【操控】","【油耗】","【舒适性】","【外观】","【内饰】","【性价比】","【故障】","【保养】","【其他描述】"]
 
 tran_tag={'【最满意的一点】':'advantage','【最不满意的一点】':'shortcoming', '【空间】':'space','【动力】': 'power', '【操控】':'operation', '【油耗】':'oilwear', '【舒适性】':'comfort', '【外观】':'appearance','【内饰】' :'decoration', '【性价比】':'costperformance','【故障】': 'failure', '【保养】':'maintenance','【其他描述】': 'other'}
 
 tag = ["space", "power", "operation", "oilwear", "comfort", "appearance", "decoration", "costperformance"]
 
-comment_dict = collections.OrderedDict()    
-for field in comment_field:
-    comment_dict[field] = ""
+score_dict = collections.OrderedDict()    
+for field in score_field:
+    score_dict[field] = ""
+
+spec_dict = collections.OrderedDict()    
+for field in spec_field:
+    spec_dict[field] = ""
 
 url_pool = [
     # {"web":"autohome", "firm":u"奔驰", "brand":u"北京奔驰", "series":u"奔驰GLC", "url":"http://k.autohome.com.cn/66/", "last_visit":time.clock(), "last_content":""}
@@ -150,7 +155,7 @@ def get_car_series():
     return url_pool
 
 
-def store_comment(web_name, record):
+def store_user_score(web_name, record):
     # processing raw_comment
     # store it in sql.
     T=[]
@@ -168,7 +173,36 @@ def store_comment(web_name, record):
         cur.execute('SET CHARACTER SET utf8;')
         cur.execute('SET character_set_connection=utf8;')
 
-        sql='insert into score values(%s, %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s , %s);'
+        sql='insert into user_score values(%s, %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s , %s);'
+        cur.execute(sql, T)
+        
+        cur.close()
+        conn.commit()
+        conn.close()
+    except MySQLdb.Error,e:
+        print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+
+    return
+
+def store_spec_score(web_name, record):
+    # processing raw_comment
+    # store it in sql.
+    T=[]
+    i=0
+    for (key, value) in record.items():
+        T.append(value)
+        
+    try:
+        conn=MySQLdb.connect(host='127.0.0.1',user='root',passwd='1234',db='car',port=3306)
+        cur=conn.cursor()
+
+        conn.set_character_set('utf8')
+
+        cur.execute('SET NAMES utf8;')
+        cur.execute('SET CHARACTER SET utf8;')
+        cur.execute('SET character_set_connection=utf8;')
+
+        sql='insert into spec_score values(%s, %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s ,%s , %s , %s);'
         cur.execute(sql, T)
         
         cur.close()
@@ -189,44 +223,69 @@ def autohome_crawler(brand, series, url_base, last_visit, last_content):
     cnt = 0
     page_num = 1
     url_comment = url_base
+
+    spec_list = []
+
     while(flag):
-        r = requests.get(url_comment)
-        soup = BeautifulSoup(r.text)
-        for item in soup.body.find_all("div", class_="mouthcon"):
-            # try:
-            record = copy.copy(comment_dict)
-            record["brand"] = brand
-            record["series"] = series
-            record["spec"] = "".join(item.select("div.mouthcon-cont-left dl.choose-dl dd")[0].text.split())
-            record["web"] = web_name
-            record["url"] = item.select(".mouth-main .mouth-item .cont-title .title-name a")[0]["href"]
-        
-            # write additional info         
-            record["upvote"] = upvote = item.select(".mouth-main .mouth-remak label.supportNumber")[0].text
-            record["respond"] = respond = item.select(".mouth-main .mouth-remak span.CommentNumber")[0].text
-            print "upvote is " + upvote
-            print "respond is " + respond
-            comment_date = item.select(".mouth-main .mouth-item .title-name b")[-1].text.strip()
-            print "date: ", comment_date
-
-            scores = item.select(".score-small")
-            for i in range(len(scores)):
-            	record[tag[i]] = scores[i].next_sibling.text
-
-            record["dateNtime"] = comment_date
-            cnt += 1
-            store_comment(web_name, record)
+        try:
+            r = requests.get(url_comment)
+            soup = BeautifulSoup(r.text)
+            for item in soup.body.find_all("div", class_="mouthcon"):
+                # try:
+                record = copy.copy(score_dict)
+                record["brand"] = brand
+                record["series"] = series
+                record["spec"] = "".join(item.select("div.mouthcon-cont-left dl.choose-dl dd")[0].text.split())
+                record["web"] = web_name
+                record["url"] = item.select(".mouth-main .mouth-item .cont-title .title-name a")[0]["href"]
             
-            # except Exception as e:
-            #   print e
+                if record["spec"] not in spec_list:
+                    print record["spec"]
+                    score_url = "http://k.autohome.com.cn" + item.select(".mouth-main .nav-sub > a")[0]["href"]
+                    spec_list.append(record["spec"])
+                    r = requests.get(score_url)
+                    soup2 = BeautifulSoup(r.text)
+                    spec_record = copy.copy(spec_dict)
+                    spec_record["brand"] = brand
+                    spec_record["series"] = series
+                    spec_record["spec"] = record["spec"]
+                    spec_record["url"] = score_url
+                    spec_record["web"] = web_name
+                    spec_record["total_score"] = soup2.select("span.number-fen")[0].text.strip()
+                    i = 0
+                    for item2 in soup2.select("ul.date-ul li"):
+                        if item2.get("class") != ["title"]:
+                            spec_record[tag[i]] = item2.select("div.width-02")[0].text.strip()
+                            i += 1
+                    store_spec_score(web_name, spec_record)
+
+                # write additional info         
+                record["upvote"] = upvote = item.select(".mouth-main .mouth-remak label.supportNumber")[0].text
+                record["respond"] = respond = item.select(".mouth-main .mouth-remak span.CommentNumber")[0].text
+                print "upvote is " + upvote
+                print "respond is " + respond
+                comment_date = item.select(".mouth-main .mouth-item .title-name b")[-1].text.strip()
+                print "date: ", comment_date
+
+                scores = item.select(".score-small")
+                for i in range(len(scores)):
+                	record[tag[i]] = scores[i].next_sibling.text
+
+                record["date"] = comment_date
+                cnt += 1
+                store_user_score(web_name, record)
+            
         
-        page_next = soup.body.find_all("a", class_="page-item-next")
-        # Get next page.
-        if (page_next != [] and page_next[0].get("href") != "###"):
-            page_num += 1
-            url_comment = url_base + "/index_" + str(page_num) + ".html"
-        else:
-            flag = 0
+            page_next = soup.body.find_all("a", class_="page-item-next")
+            # Get next page.
+            if (page_next != [] and page_next[0].get("href") != "###"):
+                page_num += 1
+                url_comment = url_base + "/index_" + str(page_num) + ".html"
+            else:
+                flag = 0
+        except Exception as e:
+          print e
+          traceback.print_exc(file=sys.stdout)
     if cnt == 0:
         print "No comment in url: ", url_base
 
@@ -234,19 +293,21 @@ def autohome_crawler(brand, series, url_base, last_visit, last_content):
 def main():
     global url_pool
 
-    if not os.path.exists("data/"):
-        os.makedirs("data/")
-    os.chdir("data/")
 
     # get all series!
-    if not os.path.exists("url_pool.txt"):
+    if not os.path.exists("url_pool.json"):
         url_pool = get_car_series()
-        with open("url_pool.txt", "w") as f:
+        with open("url_pool.json", "w") as f:
             json.dump(url_pool, f)
         f.close()
     else:
-        f = open("url_pool.txt", "r")
+        f = open("url_pool.json", "r")
         url_pool = json.load(f)
+        f.close()
+
+    if not os.path.exists("data/"):
+        os.makedirs("data/")
+    os.chdir("data/")
 
     # sort the url by last_visit.
     for url_comment in url_pool:

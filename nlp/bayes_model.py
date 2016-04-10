@@ -27,8 +27,7 @@ stopwords = {}.fromkeys([ line.rstrip() for line in open('stopwords.txt') ])
 
 # get all words into a vector
 stat = {}
-series = u"宝马3系"
-sql = 'select comment from info where %s' % limitation
+sql = 'select distinct comment from test_info where %s' % limitation
 total_count = cur.execute(sql)
 for r in cur.fetchall():
 	seg_list = list(set(jieba.cut(r[0].decode('utf8'))))
@@ -40,7 +39,7 @@ for r in cur.fetchall():
 		else:
 			stat[seg] = 1
 j = 1
-filter_freq = 5
+filter_freq = 0
 for k in stat.keys():
 	# filter out those low-freq.
 	if stat[k] <= filter_freq:
@@ -70,7 +69,7 @@ i = 0
 for tag in tags:
 	local_stat = {}
 	tmp_data = []
-	sql='select comment from info where label="%s";' % tag
+	sql='select distinct comment from test_info where label="%s";' % tag
 	print "tag is: ", tag
 	count = cur.execute(sql)
 	result = cur.fetchmany(count)
