@@ -10,6 +10,14 @@ nohup.out
 
 *.pkl
 
+*.hdf5
+*.t7
+
+*.all
+*.train
+*.dev
+*.test
+
 nohup.out
 
 access.rec

@@ -1,0 +1,163 @@
+ vec_type: segment, add_info: 11_cleaner, feat_type: , K: 0 
+ model: svm_linear 
+ acc: 0.88555 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, K: 8000 
+ model: svm_linear 
+ acc: 0.87165 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, K: 8000 
+ model: svm_linear 
+ acc: 0.8709 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, K: 2000 
+ model: svm_linear 
+ acc: 0.85365 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, K: 5000 
+ model: svm_linear 
+ acc: 0.8674 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, K: 8000 
+ model: svm_linear 
+ acc: 0.87165 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, K: 2000 
+ model: svm_linear 
+ acc: 0.8533 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, K: 5000 
+ model: svm_linear 
+ acc: 0.8659 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, K: 8000 
+ model: svm_linear 
+ acc: 0.8709 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 500 
+ model: svm_linear 
+ acc: 0.82205 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 1000 
+ model: svm_linear 
+ acc: 0.8403 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 2000 
+ model: svm_linear 
+ acc: 0.85365 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 5000 
+ model: svm_linear 
+ acc: 0.8674 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 8000 
+ model: svm_linear 
+ acc: 0.87165 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 10000 
+ model: svm_linear 
+ acc: 0.87415 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 12000 
+ model: svm_linear 
+ acc: 0.8761 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 15000 
+ model: svm_linear 
+ acc: 0.8799 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 500 
+ model: svm_linear 
+ acc: 0.8235 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 1000 
+ model: svm_linear 
+ acc: 0.83955 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 2000 
+ model: svm_linear 
+ acc: 0.8533 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 5000 
+ model: svm_linear 
+ acc: 0.8659 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 8000 
+ model: svm_linear 
+ acc: 0.8709 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 10000 
+ model: svm_linear 
+ acc: 0.874 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 12000 
+ model: svm_linear 
+ acc: 0.87585 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 15000 
+ model: svm_linear 
+ acc: 0.87735 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 500 
+ model: svm_linear 
+ acc: 0.82205 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 1000 
+ model: svm_linear 
+ acc: 0.84025 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 2000 
+ model: svm_linear 
+ acc: 0.85365 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 5000 
+ model: svm_linear 
+ acc: 0.8674 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 8000 
+ model: svm_linear 
+ acc: 0.87165 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 10000 
+ model: svm_linear 
+ acc: 0.87415 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 12000 
+ model: svm_linear 
+ acc: 0.8761 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: chi2, k: 15000 
+ model: svm_linear 
+ acc: 0.8799 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 500 
+ model: svm_linear 
+ acc: 0.8235 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 1000 
+ model: svm_linear 
+ acc: 0.83955 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 2000 
+ model: svm_linear 
+ acc: 0.8533 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 5000 
+ model: svm_linear 
+ acc: 0.8659 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 8000 
+ model: svm_linear 
+ acc: 0.8709 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 10000 
+ model: svm_linear 
+ acc: 0.874 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 12000 
+ model: svm_linear 
+ acc: 0.87585 
+
+ vec_type: segment, add_info: 11_cleaner, feat_type: mi, k: 15000 
+ model: svm_linear 
+ acc: 0.87735 

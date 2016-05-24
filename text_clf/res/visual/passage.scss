@@ -1,0 +1,8 @@
+$colors: (#F57272, #F5BB72, #F0FE18, #DEF55D, #7BF55D, #5DF5CB, #5DBDF5, #5D69F5, #AD5DF5, #F55DC6);
+$list: (space,power,operation,oilwear,comfort,appearance,decoration,costperformance,failure,maintenance);
+
+@for $i from 1 to length($list) {
+	.#{nth($list, $i)} {
+		background: lighten(nth($colors, $i), 10%);
+	}
+}

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>汽车评论可视化</title>
-    <script type="text/javascript" src="js/d3.js"></script>
-    <script type="text/javascript" src="js/jquery.min.js"></script>
+	<meta charset="utf-8">
+	<title>汽车评论可视化</title>
+	<link rel="stylesheet" type="text/css" href="/css/style.css">
+	<script type="text/javascript" src="/js/d3.js"></script>
+	<script type="text/javascript" src="/js/jquery.min.js"></script>
 </head>
 <style type="text/css">
 body {
@@ -75,19 +76,74 @@ div.comment_detail {
 	max-height: 300px;
 	overflow-y: auto;
 }
+
+div.comment_item a {
+	text-decoration: none;
+	color: #406EF6;
+}
+
+#keyword_div {
+	position: absolute;
+	top: 50px;
+	right: 100px;
+	width: 300px;
+}
+
+.keyword_span {
+	position: relative;
+	padding: 5px 10px;
+	border: 1px #FF9B00 solid;
+	box-shadow: 1px 1px 1px #888888;
+	display: inline-block;
+}
+
+#sentiment_all_div {
+	position: absolute;
+	top: 200px;
+	left: 100px;
+	width: 100px;
+}
+
+.sentiment_all_span {
+	position: relative;
+}
+
+#sentiment_all_div {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	width: 100px;
+	opacity: 0.5;
+}
+
+.sentiment_all_span {
+	position: relative;
+	opacity: 0.5;
+}
+
+.load_fail {
+	text-align: center;
+}
+
+
 </style>
 <body>
 
 <div class="header">
-	<div class="search">
+<!-- 	<div class="search">
 		<form method="POST" action="/visual">
 		<label for="series">series</label>
 		<input name="sereis" type="text"></input>
 		<button>submit</button>
 	</form>
-	</div>
+	</div> -->
 </div>
-
+<div id="keyword_div">
+	<div class="keyword_span"></div>
+</div>
+<div id="sentiment_all_div">
+	<div class="sentiment_all_span"></div>
+</div>
 <div id="view">
 </div>
 
@@ -130,13 +186,13 @@ div.comment_detail {
 			});
 
 		var link = svg.selectAll(".link")
-		  	.data(links)
-		  	.enter()
-		  	.append("line")
-		  	.attr("class", "link")
-		  	.attr("stroke",function(d) {return d.id == 0? color[0] : color[1]; })
-		  	.attr("stroke-opacity","0.8")
-		  	.style("stroke-width",2);
+			.data(links)
+			.enter()
+			.append("line")
+			.attr("class", "link")
+			.attr("stroke",function(d) {return d.id == 0? color[0] : color[1]; })
+			.attr("stroke-opacity","0.8")
+			.style("stroke-width",2);
 
 		var node = svg.selectAll(".node")
 			.data(nodes)
@@ -198,10 +254,9 @@ div.comment_detail {
 		});
 
 	};
-	
 
-	firm_display();
-
+	// firm_display();
+		
 	function brand_display(father_name, center_name) {
 		
 		$("#view").empty();
@@ -246,7 +301,7 @@ div.comment_detail {
 		  .style("pointer","cursor")
 		  .on("click", function(d) { 
 		  	if(d.id == 0) return;
-
+		  	// console.log(center_name, d.name);
 		  	return series_display(center_name, d.name); 
 		  });
 
@@ -450,15 +505,16 @@ div.comment_detail {
 		});
 
 	};
-	
-	//series_display(father_name, center_name);
-
+	// father_name = "宝马";
+	// center_name = "宝马3系";
+	series_display("宝马", "宝马3系");
 
 	function spec_display(father_name, center_graph) {
 
 		$("#view").empty();
 		// 0 for center, 1 for good, 2 for bad, 3 for neutral;
 		var color = ["#54a4ee","red","#bedaf4","gray"];
+		var node_color = "#9AC9F4";
 		var svg = d3.select("#view").append("svg")
 			.attr("width", width)
 			.attr("height", height);
@@ -467,251 +523,301 @@ div.comment_detail {
 			.size([width, height]);	
 
 		// special!
-		var color_tag = d3.select("#view").append("div")
-			.attr("class","color_tag")
-			.selectAll("div")
-			.data(color.slice(1, color.length))
-			.enter()
-			.append("div")
-			.append("span")
-			.attr("class","color")
-			.style({"display": "inline-block", "background": function(d) {return d;}, "width": "20px", "height": "20px", "border-radius": "20px", "vertical-align": "middle", "border": "2px black solid"})
-			.each(function(d, i) {
-				var text = document.createElement("span");
-				var name = function(i) {
-					if (i == 0)
-						return "正面评价";
-					if (i == 1)
-						return "负面评价";
-					else
-						return "中性评价";
-				};
-				text.innerHTML = name(i);
-				text.style.marginRight = "5px";
-				text.style.marginLeft = "3px";
-				this.parentNode.appendChild(text);
-			});
+		// var color_tag = d3.select("#view").append("div")
+		// 	.attr("class","color_tag")
+		// 	.selectAll("div")
+		// 	.data(color.slice(1, color.length))
+		// 	.enter()
+		// 	.append("div")
+		// 	.append("span")
+		// 	.attr("class","color")
+		// 	.style({"display": "inline-block", "background": function(d) {return d;}, "width": "20px", "height": "20px", "border-radius": "20px", "vertical-align": "middle", "border": "2px black solid"})
+		// 	.each(function(d, i) {
+		// 		var text = document.createElement("span");
+		// 		var name = function(i) {
+		// 			if (i == 0)
+		// 				return "正面评价";
+		// 			if (i == 1)
+		// 				return "负面评价";
+		// 			else
+		// 				return "中性评价";
+		// 		};
+		// 		text.innerHTML = name(i);
+		// 		text.style.marginRight = "5px";
+		// 		text.style.marginLeft = "3px";
+		// 		this.parentNode.appendChild(text);
+		// 	});
 
 		graph = center_graph;
 		console.log(graph);
-		// d3.json("comment.json", function(error, graph) {
-			var nodes = [], links = [];
-			var series = graph.series;
-			series["fixed"] = true;
-			series["x"] = width/2;
-			series["y"] = height/2;
-			nodes.push(series);
-			// create links;
-			for (var i = 0; i < graph.nodes.length; ++i) {
-				nodes.push(graph.nodes[i]);
-				links.push({"source":i+1,"target":0});
-			}
+		var nodes = [], links = [];
+		var spec = graph.spec;
+		spec["fixed"] = true;
+		spec["x"] = width/2;
+		spec["y"] = height/2;
+		spec["id"] = 0;
+		nodes.push(spec);
+		// create links;
+		for (var i = 0; i < graph.nodes.length; ++i) {
+			graph.nodes[i]["id"] = i+1;
+			nodes.push(graph.nodes[i]);
+			links.push({"source":i+1,"target":0});
+		}
 
-			// special!
-			d3.select("#view").append("div")
-				.attr("class","hot")
-				.append("span")
-				.text("热度:")
-				.style({"margin-right":"3px"})
-				.each(function() {
-					var hot_num = graph.series.hot;
-					var hot = document.createElement("span");
-					hot.innerHTML = hot_num;
-					this.parentNode.appendChild(hot);
-					hot.style.color = "red";
-				});
+		// special!
+		// d3.select("#view").append("div")
+		// 	.attr("class","hot")
+		// 	.append("span")
+		// 	.text("热度:")
+		// 	.style({"margin-right":"3px"})
+		// 	.each(function() {
+		// 		var hot_num = graph.spec.hot;
+		// 		var hot = document.createElement("span");
+		// 		hot.innerHTML = hot_num;
+		// 		this.parentNode.appendChild(hot);
+		// 		hot.style.color = "red";
+		// 	});
 
-			force.nodes(nodes)
-				.links(links)
-				.start()
-				.gravity(0)
-				.charge( function(d) { 
-					if (d.group == 0) {return 0;} else {return 200;} 
-				;});
+		force.nodes(nodes)
+			.links(links)
+			.start()
+			.gravity(0)
+			.charge( function(d) { 
+				if (d.id == 0) {return 0;} else {return 200;} 
+			;});
+	  
+		
+		var link = svg.selectAll(".link")
+		  .data(links)
+		  .enter()
+		  .append("line")
+		  .attr("class", "link")
+		  .attr("stroke",function(d) {return node_color})
+		  .attr("stroke-opacity","0.8")
+		  .style("stroke-width",2);
 		  
-			
-			var link = svg.selectAll(".link")
-			  .data(links)
-			  .enter()
-			  .append("line")
-			  .attr("class", "link")
-			  .attr("stroke",function(d) {return color[d.source.group]})
-			  .attr("stroke-opacity","0.8")
-			  .style("stroke-width",2);
-			  
-			var node = svg.selectAll(".node")
-			  .data(nodes)
-			  .enter()
-			  .append("g")
-			  .attr("class", function(d) { return d.id == 0 ? "series_node center_node" : "spec_node"; })
-			  .style("pointer","cursor");
+		var node = svg.selectAll(".node")
+		  .data(nodes)
+		  .enter()
+		  .append("g")
+		  .attr("class", function(d) { return d.id == 0 ? "series_node center_node" : "spec_node"; })
+		  .style("pointer","cursor");
 
-			var circle = node.append("circle")
-			  .attr("class", "node")
-			  .attr("r",function(d){ 
-			  	if(d.group == 0) {
-			  		return 100;
-			  	} else {
-			  		return Math.sqrt(d.weight*300) + Math.random()*5 + 5;
-			  	} 
-			  }) // special!
-			  .style("fill", function(d) { return color[d.group]; })
-			  .on("mouseenter", function(d){
-			  	if (d.group == 0)
-			  		return;
-			  	d3.select(this).attr("r", 1.2*this.r.baseVal.value);
-			  })
-			  .on("mouseout", function(d) {
-			  	if (d.group == 0)
-			  		return;
-			  	d3.select(this)
-			  		.attr("r", this.r.baseVal.value/1.2);
-			  });
+		var circle = node.append("circle")
+		  .attr("class", "node")
+		  .attr("r",function(d){ 
+		  	if(d.id == 0) {
+		  		return 100;
+		  	} else {
+		  		return Math.sqrt(d.weight*300) + Math.random()*5 + 5;
+		  	} 
+		  }) // special!
+		  .style("fill", function(d) {
+		  	if (d.id == 0) {
+		  		return color[0];
+		  	} else {
+		  		return node_color;
+		  	}
+		  })
+		  .on("mouseenter", function(d){
+		  	if (d.id == 0)
+		  		return;
+		  	d3.select(this).attr("r", 1.2*this.r.baseVal.value);
+		  })
+		  .on("mouseout", function(d) {
+		  	if (d.id == 0)
+		  		return;
+		  	d3.select(this)
+		  		.attr("r", this.r.baseVal.value/1.2);
+		  });
 
-			
-			var node_text = node.append("text")
-			  .attr("class","nodetext")
-			  .style("text-anchor", "middle")
-			  .text(function(d) { return d.name; });
+		// console.log(circle);
+		var node_text = node.append("text")
+		  .attr("class","nodetext")
+		  .style("text-anchor", "middle")
+		  .text(function(d) { return d.name; });
 
-			var center_node = node[0][0];
-			force.on("tick", function() {
-				node.attr("transform", function(d){ 
-					d.x = d.x < d.r/2 ? d.r/2 : d.x;  
-					d.x = d.x + d.r/2 > width ? width - d.r/2 : d.x; 
-					d.y = d.y < d.r/2 ? d.r/2 : d.y;  
-					d.y = d.y + d.r/2 > height ? height - d.r/2 : d.y;
-					return "translate("+d.x+"," + d.y + ")";
-				});
-				node_text.attr("top", function(d){
-					if (d.id == 0)
-						return;
-					var dx = d.x - center_node.__data__.x > 0 ? 1 : -1;
-					var dy = d.y - center_node.__data__.y > 0 ? 1.4 : -1;
-					var r = circle[0][d.id].getAttribute("r");
-					d3.select(this).attr("dx", dx*r*1.2)
-					d3.select(this).attr("dy", dy*r*1.2)
-					 // = dx + center_node.__data__.x;
-				});
-				link.attr("x1", function(d) { return d.source.x; })
-					.attr("y1", function(d) { return d.source.y; })
-					.attr("x2", function(d) { return d.target.x; })
-					.attr("y2", function(d) { return d.target.y; });
-				force.tick();
+		var center_node = node[0][0];
+		force.on("tick", function() {
+			node.attr("transform", function(d){ 
+				d.x = d.x < d.r/2 ? d.r/2 : d.x;  
+				d.x = d.x + d.r/2 > width ? width - d.r/2 : d.x; 
+				d.y = d.y < d.r/2 ? d.r/2 : d.y;  
+				d.y = d.y + d.r/2 > height ? height - d.r/2 : d.y;
+				return "translate("+d.x+"," + d.y + ")";
 			});
-
-			// begin father node creation
-			
-			var father_node = $(".center_node").clone(false, true) // deep clone
-					.attr("class", "brand_node father_node")
-					.attr("transform", "translate(100," + height/2 + ")");
-			father_node.find("text").text(father_name).attr("class","firm_node father_node");
-			father_node.insertAfter($(".center_node"));
-
-			var father_line = $(".link:first").clone(false, true)
-					.attr("x1", "50").attr("y1", height/2)
-					.attr("x2", width/2).attr("y2", height/2)
-					.attr("stroke", color[0]);
-			father_line.insertAfter($(".link")[0]);
-
-			father_node.on("click", function() {
-				series_display("宝马", father_name);
+			node_text.attr("top", function(d){
+				if (d.id == 0)
+					return;
+				var dx = d.x - center_node.__data__.x > 0 ? 1 : -1;
+				var dy = d.y - center_node.__data__.y > 0 ? 1.4 : -1;
+				var r = circle[0][d.id].getAttribute("r");
+				d3.select(this).attr("dx", dx*r*1.2)
+				d3.select(this).attr("dy", dy*r*1.2)
+				 // = dx + center_node.__data__.x;
 			});
+			link.attr("x1", function(d) { return d.source.x; })
+				.attr("y1", function(d) { return d.source.y; })
+				.attr("x2", function(d) { return d.target.x; })
+				.attr("y2", function(d) { return d.target.y; });
+			force.tick();
+		});
 
-			// special!
 
-			// when click, dynamically create the detail div.
-			// note that the order of nodes and comments should be the same.
+		// create keyword tags
+		keyword_div = $("#keyword_div");
+		keyword_span = $(".keyword_span:first")
+		graph.keywords.forEach(function(d, i) {
+			if (keyword_span.text() == "") {
+				// console.log(d.weight);
+				// console.log("rgba(255,155,0," + (d.weight/10).toFixed(2) + ")")
+				keyword_span.text(d.keyword);
+				keyword_span.css("background-color", "rgba(255,155,0," + (d.weight/10).toFixed(2) + ")");
+			}
+			else {
+				span = keyword_span.clone();
+				span.text(d.keyword);
+				span.css("background-color", "rgba(255,155,0," + (d.weight/10).toFixed(2) + ")");
+				keyword_div.append(span);
+			};
+		});
 
-			var comment_div = document.createElement("div");
-			comment_div.className = "tag_detail";
-			var content = ' \
-				<h4></h4> \
-				<span class="cancel_button" style="cursor:pointer;"><img src="image/tag-close.png" /></span> \
-				<div class="comment_detail"></div> \
-			';
-			comment_div.innerHTML =  content;
-			document.getElementById("view").appendChild(comment_div);
+		// create sentiment tags
+		
 
-			node.on("click", function(d) {
-				if (d.id != 0) {
-					var comment_list = d.comments;
-					var tag_detail = document.getElementsByClassName("tag_detail")[0];
-					var comment_item, comment_tmp;
-					var comment_detail = document.getElementsByClassName("comment_detail")[0];
-					comment_detail.innerHTML = null;
-					for (var i = 0; i < comment_list.length; ++i) {
-						if (i == 0) {
-							var comment = '\
-								<div class="comment_item"> \
-								<span style="position:relative; left:0; margin-top:10px"></span> \
-								<span style="float: right; margin-right: 3px;"></span> \
-								<p></p> \
-								<hr style="margin-bottom: 0px;"> </div> \
-							';
-							comment_detail.innerHTML = comment;
-							comment_item = document.getElementsByClassName("comment_item")[0];
-							comment_tmp = comment_item;
-							from = comment_list[i].from;
-							if (comment_list[i].url) {
-								from = '<a href="' + comment_list[i].url + '" target="_blank">' + comment_list[i].from + '</a>';						
-							}
-							comment_tmp.getElementsByTagName("span")[0].innerHTML = from;
-							comment_item.getElementsByTagName("span")[1].innerHTML = comment_list[i].date;
-							comment_item.getElementsByTagName("p")[0].innerHTML = comment_list[i].content;
+		// begin father node creation
+		
+		var father_node = $(".center_node").clone(false, true) // deep clone
+				.attr("class", "brand_node father_node")
+				.attr("transform", "translate(100," + height/2 + ")");
+		father_node.find("text").text(father_name).attr("class","firm_node father_node");
+		father_node.insertAfter($(".center_node"));
+
+		var father_line = $(".link:first").clone(false, true)
+				.attr("x1", "50").attr("y1", height/2)
+				.attr("x2", width/2).attr("y2", height/2)
+				.attr("stroke", color[0]);
+		father_line.insertAfter($(".link")[0]);
+
+		father_node.on("click", function() {
+			series_display("宝马", father_name);
+		});
+
+		// special!
+
+		// when click, dynamically create the detail div.
+		// note that the order of nodes and comments should be the same.
+
+		var comment_div = document.createElement("div");
+		comment_div.className = "tag_detail";
+		var content = ' \
+			<h4></h4> \
+			<span class="cancel_button" style="cursor:pointer;"><img src="image/tag-close.png" /></span> \
+			<div class="comment_detail"></div> \
+		';
+		comment_div.innerHTML =  content;
+		document.getElementById("view").appendChild(comment_div);
+
+		node.on("click", function(d) {
+			if (d.id == 0) {
+				return;
+			};
+			var comment_list = d.comments;
+			var tag_detail = document.getElementsByClassName("tag_detail")[0];
+			var comment_item, comment_tmp;
+			var comment_detail = document.getElementsByClassName("comment_detail")[0];
+			comment_detail.innerHTML = null;
+			for (var i = 0; i < comment_list.length; ++i) {
+				if (i == 0) {
+					var comment = '\
+						<div class="comment_item"> \
+						<span style="position:relative; left:0; margin-top:10px"></span> \
+						<span style="float: right; margin-right: 3px;"></span> \
+						<p></p> \
+						<hr style="margin-bottom: 0px;"> </div> \
+					';
+					comment_detail.innerHTML = comment;
+					comment_item = document.getElementsByClassName("comment_item")[0];
+					comment_tmp = comment_item;
+					web = comment_list[i].web;
+					if (comment_list[i].url) {
+						web = '<a href="' + comment_list[i].url + '" target="_blank">' + comment_list[i].web + '</a>';						
+					}
+					comment_tmp.getElementsByTagName("span")[0].innerHTML = web;
+					comment_item.getElementsByTagName("span")[1].innerHTML = comment_list[i].date;
+					comment_item.getElementsByTagName("p")[0].innerHTML = comment_list[i].comment;
+				}
+				else {
+					comment_tmp = comment_item.cloneNode(true);
+					web = comment_list[i].web;
+					if (comment_list[i].url) {
+						web = '<a href="' + comment_list[i].url + '">' + comment_list[i].web + '</a>';						
+					}
+					comment_tmp.getElementsByTagName("span")[0].innerHTML = web;
+					comment_tmp.getElementsByTagName("span")[1].innerHTML = comment_list[i].date;
+					comment_tmp.getElementsByTagName("p")[0].innerHTML = comment_list[i].comment;
+					comment_item.parentNode.appendChild(comment_tmp);
+				}
+			}
+			tag_detail.style.display = "block";
+			tag_detail.getElementsByTagName("h4")[0].innerHTML = d.name;
+			tag_detail.style.left = (d3.select(this)[0][0].__data__.x) + "px";
+			tag_detail.style.top = (d3.select(this)[0][0].__data__.y) + "px";
+			comment_detail.scrollTop = 0;
+
+			var load_offset = 0;
+			function loadMore() {
+				console.log("load!");
+				url = "/spec/" + spec.name + "/load_more/" + d.name + "/" + load_offset;
+				$.ajax({
+					url: url,
+					success: function(data) {
+						comment_item = document.getElementsByClassName("comment_item")[0];
+						len = data.length;
+						if (!len) {
+							div = document.createElement("div");
+							div.className = "load_fail";
+							div.innerHTML = '<p>No more :(</p>'
+							comment_item.parentNode.appendChild(div);
+							return;
 						}
-						else {
+						comment_list = data;
+						load_offset += len;
+						for (var i = 0; i < len; ++i) {
 							comment_tmp = comment_item.cloneNode(true);
-							from = comment_list[i].from;
+							web = comment_list[i].web;
 							if (comment_list[i].url) {
-								from = '<a href="' + comment_list[i].url + '">' + comment_list[i].from + '</a>';						
+								web = '<a href="' + comment_list[i].url + '">' + comment_list[i].web + '</a>';						
 							}
-							comment_tmp.getElementsByTagName("span")[0].innerHTML = from;
+							comment_tmp.getElementsByTagName("span")[0].innerHTML = web;
 							comment_tmp.getElementsByTagName("span")[1].innerHTML = comment_list[i].date;
-							comment_tmp.getElementsByTagName("p")[0].innerHTML = comment_list[i].content;
+							comment_tmp.getElementsByTagName("p")[0].innerHTML = comment_list[i].comment;
 							comment_item.parentNode.appendChild(comment_tmp);
 						}
+						$(comment_detail).bind('scroll', bindScroll);
+
+					},
+					error: function() {
+						console.log("error in loading data");
+						// get to 500 error.
 					}
-					
-					tag_detail.style.display = "block";
-					//console.log(1);
-					tag_detail.getElementsByTagName("h4")[0].innerHTML = d.name;
-					tag_detail.style.left = (d3.select(this)[0][0].__data__.x) + "px";
-					tag_detail.style.top = (d3.select(this)[0][0].__data__.y) + "px";
-					comment_detail.scrollTop = 0;
-		            		
+				});
+			};
 
-				}
-			});
-
-			var g = document.getElementsByTagName("g");
-			for (var i = 1; i <= circle[0].length; ++i) {
-				g[i].onclick = function(e) {
-					//console.log(2);
-					var ev = e || window.event;
-			        if(ev.stopPropagation){
-			            ev.stopPropagation();
-			        }
-			        else if(window.event){
-			            window.event.cancelBubble = true;
-			        }
+			function bindScroll() {
+				if ( $(comment_detail).scrollTop() + $(comment_detail).height() > comment_detail.scrollHeight - 50 ) {
+					$(comment_detail).unbind('scroll');
+					loadMore();
 				}
 			}
-			document.getElementsByClassName("tag_detail")[0].onclick = function(e) {
-				//console.log(3);
-				this.style.display = "block";
-				var ev = e || window.event;
-                                if(ev.stopPropagation){
-                                    ev.stopPropagation();
-                                }
-                                else if(window.event){
-                                    window.event.cancelBubble = true;
-                                }
 
-			};
-			document.getElementsByClassName("cancel_button")[0].onclick = function(e) {
-				this.parentNode.style.display = "none";
-				//console.log(4);
+			$(comment_detail).scroll(bindScroll);
+		});
+
+		var g = document.getElementsByTagName("g");
+		for (var i = 1; i <= circle[0].length; ++i) {
+			// console.log(2);
+			g[i].onclick = function(e) {
 				var ev = e || window.event;
 		        if(ev.stopPropagation){
 		            ev.stopPropagation();
@@ -719,15 +825,39 @@ div.comment_detail {
 		        else if(window.event){
 		            window.event.cancelBubble = true;
 		        }
-			};
-			document.onclick = function() {
-				//console.log(5);
-				var tag_detail = document.getElementsByClassName("tag_detail")[0];
-				if (tag_detail.style.display == "block") 
-					tag_detail.style.display = "none";
-			};
-	 	// });
+			}
 		};
-		
+
+		document.getElementsByClassName("tag_detail")[0].onclick = function(e) {
+			// console.log(3);
+			this.style.display = "block";
+			var ev = e || window.event;
+            if(ev.stopPropagation){
+                ev.stopPropagation();
+            }
+            else if(window.event){
+                window.event.cancelBubble = true;
+            }
+		};
+
+		document.getElementsByClassName("cancel_button")[0].onclick = function(e) {
+			this.parentNode.style.display = "none";
+			var ev = e || window.event;
+	        if(ev.stopPropagation){
+	            ev.stopPropagation();
+	        }
+	        else if(window.event){
+	            window.event.cancelBubble = true;
+	        }
+		};
+
+		document.onclick = function() {
+			// console.log(5);
+			var tag_detail = document.getElementsByClassName("tag_detail")[0];
+			if (tag_detail != null && tag_detail.style.display == "block") 
+				tag_detail.style.display = "none";
+		};
+	}	
+
 </script>
 </html>
