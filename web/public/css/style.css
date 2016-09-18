@@ -1,0 +1,172 @@
+body {
+	color: gray;
+	margin: 0;
+	font-size: 16px !important;
+}
+
+hr {
+	border-top: 1px solid gray !important;
+}
+
+.header {
+	width: 100%;
+	min-height: 50px;
+	background-color: #E9E9E9;	
+	position: relative;
+}
+
+.header .search {
+	position: relative;
+	top: 25%;
+}
+
+svg {
+	position: absolute;
+	top: calc(50% - 300px);
+	left: calc(50% - 500px);	
+}
+
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+  cursor:pointer;
+}
+
+.center_text {
+  fill: #000;
+  font-size: 12px;
+  cursor: pointer;
+  position: relative;
+  pointer-events: none;
+  
+ }
+
+g title {
+	position: absolute;
+}
+
+.color_tag > div {
+	display: inline-block;
+}
+
+div.tag_detail {
+	position: absolute;
+	top: 0;
+	width: 310px;
+	background: rgba(237,237,237,0.9);
+	padding: 30px;
+	max-height: 400px;
+	display: none;
+}
+
+.tag_detail h4 {
+	position: relative;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	padding-bottom: 10px;
+	font-size: 18px;
+}
+
+.cancel_button {
+	float: right;
+}
+
+div.comment_item {
+	padding-right: 3px;
+	margin-top: 5px;
+	/*margin-bottom: 15px;*/
+}
+
+div.comment_item > p {
+	margin: 10px 5px;
+}
+
+div.comment_detail {
+	max-height: 300px;
+	overflow-y: auto;
+}
+
+div.comment_item a {
+	text-decoration: none;
+	color: #406EF6;
+}
+
+#keyword_div {
+	position: absolute;
+	top: 55px;
+	right: 100px;
+	width: 300px;
+}
+
+#keyword_div span:first-child {
+	position: absolute;
+	top: 0.4em;
+	left: -50px;
+}
+
+.keyword_span {
+	position: relative;
+	padding: 5px 10px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	border: 1px #FF9B00 solid;
+	box-shadow: 1px 1px 1px #888888;
+	display: inline-block;
+}
+
+#sentiment_all_div {
+	position: absolute;
+	top: 220px;
+	right: 200px;
+	width: 200px;
+	height: 20px;
+}
+
+
+#sentiment_all_div span:first-child {
+	position: absolute;
+	top: -0.1em;
+	left: -50px;
+}
+
+.sentiment_all_span {
+	position: relative;
+	display: inline-block;
+	height: 20px;
+	opacity: 0.9;
+}
+
+.sentiment_all_span:hover {
+	background-color: black;
+}
+
+#sentiment_div {
+	position: relative;
+	display: inline-block;
+	top: 3px;
+	left: 10%;
+	height: 18px;
+	opacity: 0.9;
+	height: 18px;
+}
+
+.sentiment_span {
+	position: relative;
+	float: left;
+	height: 18px;
+}
+
+.load_fail {
+	text-align: center;
+}
+
+.grow {
+	transition: all .2s ease-in-out;
+}
+
+.grow:hover {
+	transform: scale(1.02, 1.2);
+	box-shadow: 2px 2px 2px #888888;
+	z-index: 1;
+}

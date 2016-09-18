@@ -9,6 +9,7 @@ var express = require('express')
 	, async = require('async')
 	, path = require('path')
 	, partials = require('express-partials')
+	, jieba = require('nodejieba')
 
 var app = module.exports = express.createServer();
 
@@ -81,11 +82,11 @@ app.get('/spec/:spec/', function(req, res){
 	// 1. use async.each / series.
 	// 2. use promise.
 	//    different interface in jquery(not /A+), standard, when.js, then.js, Q, co.
-	//    .then() receive either async / sync. Remember resolve / reject.
+	//    .then() receive either async /sync. Remember resolve / reject.
 	// 3. use co. iterator and generator.
 
 	var idx = 0, cnt = 0;
-	node_item = [];
+	node_item = []; 
 	for (i in node_list)
 		node_item.push({"name": tran_tag[node_list[i]], "weight": 0, "comments": []});
 
@@ -115,7 +116,7 @@ app.get('/spec/:spec/', function(req, res){
 		return new Promise(function(resolve, reject) {
 			sql = 'select * from show_sentiments where spec="' + spec + '";'
 			client.query(sql, function(err, data) {
-				result_sentiment = data;
+				result_sentiment = data[0];
 				resolve();
 			});
 		});
@@ -135,21 +136,21 @@ app.get('/spec/:spec/', function(req, res){
 			result_keyword.forEach(function(data){
 				keywords.push({"weight": data.weight, "keyword":data.keyword});
 			});
-
-			total_good = 0
-			total_neutral = 0
-			total_bad = 0
-			node_list.forEach(function(i){
-				data = result_sentiment[0][i]
-				good = parseInt(data.split("/")[0]);
-				neutral = parseInt(data.split("/")[1]);
-				bad = parseInt(data.split("/")[2]);
-				total_good += good
-				total_neutral += neutral
-				total_bad += bad
-				sentiments.push([good+neutral+bad, good, neutral, bad]);
-			})
-			console.log("?");
+			total_good = 0;
+			total_neutral = 0;
+			total_bad = 0;
+			if (result_sentiment) {
+				node_list.forEach(function(i){
+					data = result_sentiment[i];
+					good = parseInt(data.split("/")[0]);
+					neutral = parseInt(data.split("/")[1]);
+					bad = parseInt(data.split("/")[2]);
+					total_good += good;
+					total_neutral += neutral;
+					total_bad += bad;
+					sentiments.push([good+neutral+bad, good, neutral, bad]);
+				});
+			};
 
 			graph["nodes"] = nodes;
 			graph["keywords"] = keywords;
@@ -160,7 +161,6 @@ app.get('/spec/:spec/', function(req, res){
 			
 		});
 	}; 
-
 
 	get_comments().then(get_keywords).then(get_sentiments).then(push_data);
 
@@ -176,7 +176,6 @@ app.get('/spec/:spec/load_more/:label/:offset', function(req, res) {
 	label = req.params.label;
 	label = rev_tran_tag[label];
 	sql = "select * from car.show_comment where first_show = 0 and spec = '" + spec + "' and label = '" + label + "' limit " + offset + " , 2"
-	console.log(sql);
 	client.query(sql, function(err, result){
 		result.forEach(function(data) {
 			data.web = tran_web[data.web];
@@ -185,6 +184,41 @@ app.get('/spec/:spec/load_more/:label/:offset', function(req, res) {
 	}); 
 });
 
-app.listen(8000, function(){
+app.get('/wordcloud/:spec', function(req, res) {
+	spec = req.params.spec;
+	words = [];
+	sen = "";
+	jieba.load("./node_modules/nodejieba/dict/jieba.dict.utf8", "./node_modules/nodejieba/dict/hmm_model.utf8");
+	sql = 'select distinct comment from show_comment where spec="' + spec + '";'
+
+	function load_comments() {
+		return new Promise(function(resolve, reject) {
+			client.query(sql, function(err, result) {
+				result.forEach(function(data) {
+					sen += data.comment;
+				});
+				resolve();
+			});
+		});
+	};
+
+	function cut_comments() {
+		return new Promise(function(resolve, reject) {
+			words = jieba.cut(sen); 
+		    resolve(); 
+    	});
+	}
+
+	function push_data() {
+		return new Promise(function(resolve, reject) {
+			res.json(words.slice(1, 100));
+		});
+	};
+
+	load_comments().then(cut_comments).then(push_data);
+
+});
+
+app.listen(22222, function(){
 	console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });

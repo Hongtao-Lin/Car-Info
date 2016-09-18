@@ -26,6 +26,18 @@ print "loading model..."
 clf = init_model(load_file)
 print "load complete"
 
+test_p = []
+test_s = []
+# test_s.append(u'我朋友借去开了一天也说的确是好车，这里呼吁大家一句借车还是得看人，因为很多时候因为借车会闹出不少状况的，这个不多解释！')
+# test_s.append(u'天窗、遮阳帘和车内灯光控制')
+# test_s.append(u'车子整个都很满意，但有些地方也有一些瑕疵！！！')
+# test_p.append(u'但也不算重         缺点：发动机声音有点大 这可能和没有隔音棉有关')
+# test_p.append(u'''关于操控，依旧沿用我的感性标准来衡量。在我心里，驾驭Q7这样的大家伙，一点也不困难。开它的时候，一点没有笨重的感觉，反倒有一些小型车的那种灵活的感觉。对于我的每一个转向操作，它都能非常快的执行，虽然做不到毫无拖沓，但那微乎其微的延迟可以忽略不计。Q7在低速行驶的时候，方向盘非常轻，夸张地说，用一根手指就能操作它。而一旦速度上来以后，方向盘明显变沉重，完全没有轻飘飘的感觉。
+# 车在行驶中的稳定性，我觉得也算是操控中的一项。因为如果一个车开起来晃晃悠悠，一点儿安全感都没有的话，还何谈操控？Q7的稳定性我觉得不错，在一些紧急情况下，比如紧急避让前车的时候，Q7都很稳，当然前提是不慌乱。能做到这一点，我想是因为quattro四驱以及出色的底盘和悬挂。''')
+# test_p.append(u'''现在谈谈定3系的原因，看车的时候是带老婆去4S店里看的，3系加长的后排真的太TMD大了，完全够用，而且也让老婆试驾了，动力、操控、灵活这些是宝马的特长没的说。5系毕竟要比3系大一圈，现在城市道路这么拥挤，停车位又这么紧张，而且价格也要差10万左右。平均一年算开2万公里，10万也差不多能加7年油了，买5系更多的面子上好看一点。所以说3系更多的是自已用来开的，5系则更多的给别人看的。不过跑长途应该是5系舒服一点，但3系也不差，这就是我选择3系的原因。  3系的几个优点：挂倒档右后视镜自动下翻；两个后门和后挡风玻璃还有遮阳帘；后排右侧座位还有老板键可以调整副驾驶座椅；后备箱容量挺大的；座椅很底，坐进去像跑车的感觉；雨天路滑出弯给大油明显屁股甩过去，方向也偏了，还好及时回正方向，不然碰到倒鸭子了。3系几个不足的地方：这个后备箱里没有逃身装置，这种安全功能有总比没有好；方向盘中间部分凸起太高，方向盘要调的很低才能看到仪表盘小屏幕的内容；播放U盘里的MP3能不能随机播放，里面有近700首歌，一不小心就从头开始放了.''')
+test_s.append(u'车辆减震效果不太好，转弯时感觉车子后面有些甩尾。')
+
+
 def get_top_words(top_num):
 	out = open("TopWords.txt", "w")
 	print "top %d words for each class:\n" % top_num
@@ -36,32 +48,22 @@ def get_top_words(top_num):
 		# 	if v == u"INT":
 		# 		print v, clf.coef_[tag_dic[tag]][k]
 		for idx in clf.coef_[tag_dic[tag]].argsort()[-top_num:][::-1]:
-			info = ''.join(list(word_idx[idx])) + "\t" + str(clf.coef_[tag_dic[tag]][idx])
+			tab = '\t'
+			# print len(''.join(word_idx[idx]))
+			if len(''.join(word_idx[idx])) == 4:
+				tab = ''
+			info = ''.join(list(word_idx[idx])) + tab + str(clf.coef_[tag_dic[tag]][idx])
 			print info
 			out.write(info.encode("utf8"))
 			out.write("\n")
 		out.write("\n")
 	out.close()
 
-test_p = []
-test_s = []
-# test_s.append(u'我朋友借去开了一天也说的确是好车，这里呼吁大家一句借车还是得看人，因为很多时候因为借车会闹出不少状况的，这个不多解释！')
-# test_s.append(u'天窗、遮阳帘和车内灯光控制')
-# test_s.append(u'车子整个都很满意，但有些地方也有一些瑕疵！！！')
-# test_p.append(u'但也不算重         缺点：发动机声音有点大 这可能和没有隔音棉有关')
-# test_p.append(u'''关于操控，依旧沿用我的感性标准来衡量。在我心里，驾驭Q7这样的大家伙，一点也不困难。开它的时候，一点没有笨重的感觉，反倒有一些小型车的那种灵活的感觉。对于我的每一个转向操作，它都能非常快的执行，虽然做不到毫无拖沓，但那微乎其微的延迟可以忽略不计。Q7在低速行驶的时候，方向盘非常轻，夸张地说，用一根手指就能操作它。而一旦速度上来以后，方向盘明显变沉重，完全没有轻飘飘的感觉。
-# 车在行驶中的稳定性，我觉得也算是操控中的一项。因为如果一个车开起来晃晃悠悠，一点儿安全感都没有的话，还何谈操控？Q7的稳定性我觉得不错，在一些紧急情况下，比如紧急避让前车的时候，Q7都很稳，当然前提是不慌乱。能做到这一点，我想是因为quattro四驱以及出色的底盘和悬挂。''')
-# test_p.append(u'''现在谈谈定3系的原因，看车的时候是带老婆去4S店里看的，3系加长的后排真的太TMD大了，完全够用，而且也让老婆试驾了，动力、操控、灵活这些是宝马的特长没的说。5系毕竟要比3系大一圈，现在城市道路这么拥挤，停车位又这么紧张，而且价格也要差10万左右。平均一年算开2万公里，10万也差不多能加7年油了，买5系更多的面子上好看一点。所以说3系更多的是自已用来开的，5系则更多的给别人看的。不过跑长途应该是5系舒服一点，但3系也不差，这就是我选择3系的原因。  3系的几个优点：挂倒档右后视镜自动下翻；两个后门和后挡风玻璃还有遮阳帘；后排右侧座位还有老板键可以调整副驾驶座椅；后备箱容量挺大的；座椅很底，坐进去像跑车的感觉；雨天路滑出弯给大油明显屁股甩过去，方向也偏了，还好及时回正方向，不然碰到倒鸭子了。3系几个不足的地方：这个后备箱里没有逃身装置，这种安全功能有总比没有好；方向盘中间部分凸起太高，方向盘要调的很低才能看到仪表盘小屏幕的内容；播放U盘里的MP3能不能随机播放，里面有近700首歌，一不小心就从头开始放了.''')
-# test.append(u'车辆减震效果不太好，转弯时感觉车子后面有些甩尾。')
-# print tags
-
-def sentence():
+def test_sentence():
 	for data in test_s:
 		predict_sentence_detail(clf, data)
 
-sentence()
-
-def passage():
+def test_passage():
 	for data in test_p:
 		predict_passage_by_correlation(clf, data)
 
@@ -177,7 +179,7 @@ def predict_passage_by_correlation(clf, data, pred_dic, out):
 		pred_dic[sen] = label
 	return
 
-def evaluate_split(load_file):
+def evaluate_split_delimiter(load_file):
 	f = open(load_file, "r")
 	ps = ''.join(f.readlines()).decode("utf8")
 	pl = re.split("\*{3} \d* \*{3}", ps)
@@ -401,9 +403,6 @@ def evaluate_split_sentence_bench(load_file):
 	acc /= float(len(test_dic))
 	print acc
 
-# evaluate_split_sentence("test_passage.py")
-# evaluate_split_sentence_bench("test_passage.py")
-
 def clear_passage_tag(load_file):
 	f = open(load_file, "r")
 	out = open("test_passage_ori.txt", "w")
@@ -482,4 +481,11 @@ def visual_passage(f, out):
 	f.close()
 	out.close()
 
-# visual_passage("test_passage.py", "res/visual/passage3.html")
+if __name__ == "__main__":
+	# get_top_words(20)
+	test_sentence()
+	pass
+	# evaluate_split_sentence("test_passage.py")
+	# evaluate_split_sentence_bench("test_passage.py")
+	# visual_passage("test_passage.py", "res/visual/passage3.html")
+

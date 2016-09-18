@@ -12,31 +12,36 @@ import traceback
 reload(sys) 
 sys.setdefaultencoding('utf8')   
 
-comment_field = ["brand", "series", "spec", "date", "web", "url", "advantage", "shortcoming", "space", "power", "operation", "oilwear", "comfort", "appearance", "decoration", "costperformance", "failure", "maintenance", "other", "upvote", "downvote", "respond"]
+# all possible comment types
+comment_field = ["brand", "series", "spec", "date", "web", "url", "advantage", "shortcoming", \
+	 			"space", "power", "operation", "oilwear", "comfort", "appearance", "decoration",\
+	 			"costperformance", "failure", "maintenance", "configuration", "other", "upvote", "downvote", "respond"]
 split_tag = ["【最满意的一点】", "【最不满意的一点】", '【最满意】', '【优点】','【缺点】']
 split_tag += ["【空间】","【动力】","【操控】","【油耗】","【舒适性】","【外观】","【内饰】","【性价比】"]
 split_tag += ["【故障】","【保养】","【其他描述】",'【其他】','【售前售后】','【综述】','【配置】']
 split_tag += ['【总评】','【吐槽】', '【品质】', '【细节】', '【加速】', '【噪音】']
 
+# all possible transition tags.
 tran_tag = {'【最满意的一点】':'advantage','【最满意】':'advantage','【优点】':'advantage'}
 tran_tag.update({'【缺点】':'shortcoming','【最不满意的一点】':'shortcoming','【最不满意】':'shortcoming'})
 tran_tag.update({'【空间】':'space','【动力】': 'power', '【操控】':'operation', '【油耗】':'oilwear'})
 tran_tag.update({'【舒适性】':'comfort', '【舒适度】':'comfort', '【舒适】':'comfort','【外观】':'appearance'})
 tran_tag.update({'【内饰】' :'decoration', '【性价比】':'costperformance','【故障】': 'failure'})
-tran_tag.update({'【保养】':'maintenance','【其他描述】': 'other','【其他】': 'other','【售前售后】': 'other','【综述】':'other', '【总评】':'other','【吐槽】':'other'})
+tran_tag.update({'【保养】':'maintenance','【其他描述】': 'other','【其他】': 'other','【售前售后】': 'other',\
+				'【综述】':'other', '【总评】':'other','【吐槽】':'other'})
 tran_tag.update({'【配置】':'configuration', '【品质】':'costperformance', '【细节】':'other', '【加速】':'power'})
 tran_tag.update({'【噪音】':'comfort'})
 comment_dict = collections.OrderedDict()    
 for field in comment_field:
 	comment_dict[field] = ""
 
-# get the pool from sql further.
+# further used for crawler to do requests.
 url_pool = [
 	# {"web":"sohu", "firm":u"华晨", "brand":u"宝马", "series":u"宝马3系", "url":"http://db.auto.sohu.com/huachenbmw/1232/dianping_1.html", "last_visit":time.clock(), "last_content":""},
 	# {"web":"pcauto", "firm":u"华晨", "brand":u"宝马", "series":u"宝马3系", "url":"http://price.pcauto.com.cn/comment/sg424/t1/p1.html", "last_visit":time.clock(), "last_content":""},
 	# {"web":"yiche", "firm":u"华晨", "brand":u"宝马", "series":u"宝马3系", "url":"http://car.bitauto.com/baoma3xi/koubei/tags/", "last_visit":time.clock(), "last_content":""},
-	# {"web":"autohome", "firm":u"华晨", "brand":u"宝马", "series":u"宝马3系", "url":"http://k.autohome.com.cn/66/ge0/0-0-2/", "last_visit":time.clock(), "last_content":""}
-	# {"web":"xcar", "firm":u"华晨", "brand":u"宝马", "series":u"宝马3系", "url":"http://newcar.xcar.com.cn/1472/review/0/0_2.htm", "last_visit":time.clock(), "last_content":""}
+	# {"web":"autohome", "firm":u"华晨", "brand":u"宝马", "series":u"宝马3系", "url":"http://k.autohome.com.cn/66/ge0/0-0-2/", "last_visit":time.clock(), "last_content":""},
+	# {"web":"xcar", "firm":u"华晨", "brand":u"宝马", "series":u"宝马3系", "url":"http://newcar.xcar.com.cn/1472/review/0/0_2.htm", "last_visit":time.clock(), "last_content":""},
 	# {"web":"netease", "firm":u"奔驰", "brand":u"北京奔驰", "series":u"奔驰GLC", "url":"http://product.auto.163.com/opinion_more/1990/1_1.html", "last_visit":time.clock(), "last_content":""}
 	# {"web":"xgo", "firm":u"华晨", "brand":u"宝马", "series":u"宝马3系", "url":"http://www.xgo.com.cn/2710/list_s1_p1.html", "last_visit":time.clock(), "last_content":""}
 ]
@@ -46,120 +51,120 @@ max_comment_num = 1000000
 def get_car_series():
 	global url_pool
 
-	# #autohome begin
-	# web = "autohome"
-	# url_basic = "http://www.autohome.com.cn/grade/carhtml/"
-	# cnt = 0
-	# for i in range(ord("A"), ord("Z")+1):
-	# 	url_series = url_basic + chr(i) + ".html"
-	# 	r = requests.get(url_series)
-	# 	soup = BeautifulSoup(r.text, "lxml")
-	# 	for item in soup.find_all("dl"):
-	# 		firm = item.dt.div.text
-	# 		for brand_item in item.select("div.h3-tit"):
-	# 			brand = brand_item.text
-	# 			for li in brand_item.next_sibling.next_sibling.select("li"):
-	# 				if li.select("span.text-through") != []:
-	# 					continue
-	# 				if li.select("a") == []:
-	# 					continue
-	# 				series = li.h4.text
-	# 				url = li.select("div")[-1].select("a")[-1]["href"].split("#")[0] + "ge0/0-0-2"
-	# 				print "series: ", series, "url: ", url
-	# 				cnt += 1
-	# 				url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
-	# print "###########"
-	# print "autohome cnt: ", cnt
-	# print "###########"
+	#autohome begin
+	web = "autohome"
+	url_basic = "http://www.autohome.com.cn/grade/carhtml/"
+	cnt = 0
+	for i in range(ord("A"), ord("Z")+1):
+		url_series = url_basic + chr(i) + ".html"
+		r = requests.get(url_series)
+		soup = BeautifulSoup(r.text, "lxml")
+		for item in soup.find_all("dl"):
+			firm = item.dt.div.text
+			for brand_item in item.select("div.h3-tit"):
+				brand = brand_item.text
+				for li in brand_item.next_sibling.next_sibling.select("li"):
+					if li.select("span.text-through") == []:
+						continue
+					if li.select("a") == []:
+						continue
+					series = li.h4.text
+					url = li.select("div")[-1].select("a")[-1]["href"].split("#")[0] + "ge0/0-0-2"
+					print "series: ", series, "url: ", url
+					cnt += 1
+					url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
+	print "###########"
+	print "autohome cnt: ", cnt
+	print "###########"
 
-	# #yiche begin
-	# web = "yiche"
-	# cnt = 0
-	# url_basic = "http://api.car.bitauto.com/CarInfo/MasterBrandToSerialNew.aspx?type=2&pid=0&rt=master&serias=m&key=master"
-	# r = requests.get(url_basic)
-	# brand_list = json.loads(r.text.split('["master"]=')[-1])
-	# for item in brand_list.values():
-	#   firm = item["name"]
-	#   url_series = "http://api.car.bitauto.com/CarInfo/MasterBrandToSerialNew.aspx?type=2&pid=%d&rt=serial&serias=m&key=serial&include=1" % int(item["id"])
-	#   r = requests.get(url_series)
-	#   series_list = json.loads(r.text.split('["serial"]=')[-1])
-	#   for series_item in series_list.values():
-	# 	  brand = series_item["goname"]
-	# 	  series = series_item["showName"]
-	# 	  url = "http://car.bitauto.com/%s/koubei/tags/综合/" % series_item["urlSpell"]
-	# 	  print "series: ", series, "url: ", url
-	# 	  url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
-	# 	  cnt += 1
-	# print "###########"
-	# print "yiche cnt: ", cnt
-	# print "###########"
+	#yiche begin
+	web = "yiche"
+	cnt = 0
+	url_basic = "http://api.car.bitauto.com/CarInfo/MasterBrandToSerialNew.aspx?type=2&pid=0&rt=master&serias=m&key=master"
+	r = requests.get(url_basic)
+	brand_list = json.loads(r.text.split('["master"]=')[-1])
+	for item in brand_list.values():
+	  firm = item["name"]
+	  url_series = "http://api.car.bitauto.com/CarInfo/MasterBrandToSerialNew.aspx?type=2&pid=%d&rt=serial&serias=m&key=serial&include=1" % int(item["id"])
+	  r = requests.get(url_series)
+	  series_list = json.loads(r.text.split('["serial"]=')[-1])
+	  for series_item in series_list.values():
+		  brand = series_item["goname"]
+		  series = series_item["showName"]
+		  url = "http://car.bitauto.com/%s/koubei/tags/综合/" % series_item["urlSpell"]
+		  print "series: ", series, "url: ", url
+		  url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
+		  cnt += 1
+	print "###########"
+	print "yiche cnt: ", cnt
+	print "###########"
 
-	# #pcauto begin
-	# web = "pcauto"
-	# cnt = 0
-	# url_basic = "http://www.pcauto.com.cn/"
-	# r = requests.get(url_basic)
-	# soup = BeautifulSoup(r.text, "lxml")
-	# for brand_item in soup.select("#brand_3_list dl dd"):
-	# 	firm = brand_item.a.span.text.strip()
-	# 	url_series = "http://price.pcauto.com.cn/interface/5_3/serial_json_chooser.jsp?brand=%d&callback=callback" % int(brand_item.attrs["data-value"])
-	# 	r = requests.get(url_series)
-	# 	series_list = json.loads(r.text.split("callback(")[-1][:-2]).values()[0]
-	# 	for series_item in series_list:
-	# 		if series_item["id"][0] == "+":
-	# 			brand = series_item["text"]
-	# 			continue
-	# 		series = series_item["text"]
-	# 		url = "http://price.pcauto.com.cn/comment/sg%d/t1/p1.html" % int(series_item["id"])
-	# 		print "series: ", series, "url: ", url
-	# 		url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
-	# 		cnt += 1
-	# print "###########"
-	# print "pcauto cnt: ", cnt
-	# print "###########"
+	#pcauto begin
+	web = "pcauto"
+	cnt = 0
+	url_basic = "http://www.pcauto.com.cn/"
+	r = requests.get(url_basic)
+	soup = BeautifulSoup(r.text, "lxml")
+	for brand_item in soup.select("#brand_3_list dl dd"):
+		firm = brand_item.a.span.text.strip()
+		url_series = "http://price.pcauto.com.cn/interface/5_3/serial_json_chooser.jsp?brand=%d&callback=callback" % int(brand_item.attrs["data-value"])
+		r = requests.get(url_series)
+		series_list = json.loads(r.text.split("callback(")[-1][:-2]).values()[0]
+		for series_item in series_list:
+			if series_item["id"][0] == "+":
+				brand = series_item["text"]
+				continue
+			series = series_item["text"]
+			url = "http://price.pcauto.com.cn/comment/sg%d/t1/p1.html" % int(series_item["id"])
+			print "series: ", series, "url: ", url
+			url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
+			cnt += 1
+	print "###########"
+	print "pcauto cnt: ", cnt
+	print "###########"
 
-	# #xgo begin
-	# web = "xgo"
-	# cnt = 0
-	# url_basic = "http://www.xgo.com.cn/brand.html"
-	# r = requests.get(url_basic)
-	# soup = BeautifulSoup(r.text, "lxml")
-	# for firm_item in soup.select("div.main_nr"):
-	# 	firm = firm_item.select("div.l a")[-1].text
-	# 	for brand_item in firm_item.select("div.r div.car"):
-	# 		brand = brand_item.text or firm
-	# 		for series_item in brand_item.next_sibling.select("li"):
-	# 			series = series_item.dl.dt.text
-	# 			url = series_item.dl.dt.a["href"] + "list_s1_p1.html"
-	# 			print "series: ", series, "url: ", url
-	# 			url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
-	# 			cnt += 1         
-	# print "###########"
-	# print "xgo cnt: ", cnt
-	# print "###########"
+	#xgo begin
+	web = "xgo"
+	cnt = 0
+	url_basic = "http://www.xgo.com.cn/brand.html"
+	r = requests.get(url_basic)
+	soup = BeautifulSoup(r.text, "lxml")
+	for firm_item in soup.select("div.main_nr"):
+		firm = firm_item.select("div.l a")[-1].text
+		for brand_item in firm_item.select("div.r div.car"):
+			brand = brand_item.text or firm
+			for series_item in brand_item.next_sibling.select("li"):
+				series = series_item.dl.dt.text
+				url = series_item.dl.dt.a["href"] + "list_s1_p1.html"
+				print "series: ", series, "url: ", url
+				url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
+				cnt += 1         
+	print "###########"
+	print "xgo cnt: ", cnt
+	print "###########"
 
-	# #sohu begin
-	# web = "sohu"
-	# cnt = 0
-	# url_basic = "http://db.auto.sohu.com/index.shtml"
-	# r = requests.get(url_basic)
-	# soup = BeautifulSoup(r.text, "lxml")
-	# for firm_item in soup.select("div.category_main"):
-	#   firm = firm_item.select("p.car_brand")[0].text
-	#   for brand_item in firm_item.select("div.meta_con"):
-	# 	  brand = brand_item.div.a.text
-	# 	  for series_item in brand_item.select("ul li"):
-	# 		  series = series_item.select("a.name")[0].text
-	# 		  # if no comments on this serial.
-	# 		  if series_item.select("a.del") != []:
-	# 			  continue
-	# 		  url = series_item.select("dd")[1].select("a")[1]["href"][:-5] + "_1.html"
-	# 		  print "series: ", series, "url: ", url
-	# 		  url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
-	# 		  cnt += 1
-	# print "###########"
-	# print "sohu cnt: ", cnt
-	# print "###########"
+	#sohu begin
+	web = "sohu"
+	cnt = 0
+	url_basic = "http://db.auto.sohu.com/index.shtml"
+	r = requests.get(url_basic)
+	soup = BeautifulSoup(r.text, "lxml")
+	for firm_item in soup.select("div.category_main"):
+	  firm = firm_item.select("p.car_brand")[0].text
+	  for brand_item in firm_item.select("div.meta_con"):
+		  brand = brand_item.div.a.text
+		  for series_item in brand_item.select("ul li"):
+			  series = series_item.select("a.name")[0].text
+			  # if no comments on this serial.
+			  if series_item.select("a.del") != []:
+				  continue
+			  url = series_item.select("dd")[1].select("a")[1]["href"][:-5] + "_1.html"
+			  print "series: ", series, "url: ", url
+			  url_pool.append({"web":web, "firm":firm, "brand":brand, "series":series, "url":url, "last_visit":time.clock(), "last_content":""})
+			  cnt += 1
+	print "###########"
+	print "sohu cnt: ", cnt
+	print "###########"
 	
 	#xcar begin
 	web = "xcar"
@@ -184,6 +189,7 @@ def get_car_series():
 	print "###########"
 	return url_pool
 
+# detailed config of how data are stored.
 def store_comment(web_name, record, raw_comment):
 	# processing raw_comment
 	if web_name == "autohome":
@@ -223,10 +229,10 @@ def store_comment(web_name, record, raw_comment):
 		cur.execute('SET character_set_connection=utf8;')
 
 		if web_name != "xcar":
-			sql='insert into comments values(%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s , %s, %s);'
+			sql='insert into comments2 values(%s , %s , %s , %s ,%s , %s , %s , %s ,%s , %s, %s , %s , %s ,%s , %s , %s , %s ,%s , %s , %s , %s , %s, %s);'
 			cur.execute(sql,list(record.values()))
 		else:
-			sql='insert into info_emo(label, showlabel, tendency, series, spec, web, url, comment, date) values(%s , %s , %s , %s ,%s , %s , %s , %s ,%s);'
+			sql='insert into info4(label, showlabel, tendency, series, spec, web, url, comment, date) values(%s , %s , %s , %s ,%s , %s , %s , %s ,%s);'
 			cur.execute(sql,list(record.values()))
 
 		cur.close()
@@ -258,6 +264,8 @@ def crawl_basic(url_basic, car_id):
 	file.close()
 	return car_name
 
+# when called, request a specific url, which contains brand and series info.
+# each request will all spec and all comments within them.
 def autohome_crawler(brand, series, url_base, last_visit, last_content, max_num):
 	web_name = "autohome"
 	cur_content = ""
@@ -848,10 +856,12 @@ def signal_handler(signum, frame):
 def main():
 	global url_pool, sig_stop
 
+	# if CRTL+C received, the crawler will gentlely stop.
 	sig_stop = False
 	signal.signal(signal.SIGINT, signal_handler)
 
-	# get all series!
+	# get all car-comment requests from all websites.
+	# url_pool.json, stored the remaining undone requests.
 	if not os.path.exists("url_pool.json"):
 		url_pool = get_car_series()
 		with open("url_pool.json", "w") as f:
@@ -862,7 +872,7 @@ def main():
 		url_pool = json.load(f)
 		f.close()
 
-	# get all car lists & crawl basic!
+	## get all car lists & crawl basic information, currently unused.
 	# url_series = "http://car.autohome.com.cn/config/series/66.html"
 	# r = requests.get(url_series)
 	# car_list_str = r.text.split("specIDs =")[1].split(";")[0]
@@ -871,13 +881,12 @@ def main():
 	#   url_basic = "http://car.autohome.com.cn/config/spec/" + str(car_id) + ".html"
 	#   car_name = crawl_basic(url_basic, car_id)
 
-	# sort the url by last_visit.
-
 	url_cnt = 0
 	for url_comment in url_pool:
 		if not sig_stop:
-			if url_comment["web"] == "xcar":
+			if url_comment["web"] == "yiche":
 				print url_comment["series"]
+				# do request according to different website.
 				eval(url_comment["web"]+"_crawler")(url_comment["brand"], url_comment["series"], url_comment["url"], url_comment["last_visit"], url_comment["last_content"], max_comment_num)
 				url_cnt += 1
 		else:

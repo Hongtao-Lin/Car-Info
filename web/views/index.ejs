@@ -4,129 +4,8 @@
 	<meta charset="utf-8">
 	<title>汽车评论可视化</title>
 	<link rel="stylesheet" type="text/css" href="/css/style.css">
-	<script type="text/javascript" src="/js/d3.js"></script>
-	<script type="text/javascript" src="/js/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 </head>
-<style type="text/css">
-body {
-	color: gray;
-	margin: 0;
-}
-
-.header {
-	width: 100%;
-	min-height: 50px;
-	background-color: #E9E9E9;	
-	position: relative;
-}
-
-.header .search {
-	position: relative;
-	top: 25%;
-}
-
-svg {
-	position: absolute;
-	top: calc(50% - 300px);
-	left: calc(50% - 500px);	
-}
-.node {
-  stroke: #fff;
-  stroke-width: 1.5px;
-  cursor:pointer;
-}
-.center_text {
-  fill: #000;
-  font-size: 12px;
-  cursor: pointer;
-  position: relative;
-  pointer-events: none;
-  
- }
-g title {
-	position: absolute;
-}
-.color_tag > div {
-	display: inline-block;
-}
-div.tag_detail {
-	position: absolute;
-	top: 0;
-	width: 250px;
-	background: rgba(237,237,237,0.9);
-	padding: 30px;
-	max-height: 400px;
-	display: none;
-}
-.tag_detail h4 {
-	position: relative;
-	display: inline-block;
-	margin: 0;
-	padding: 0;
-	padding-bottom: 10px;
-}
-.cancel_button {
-	float: right;
-}
-div.comment_item {
-	padding-right: 3px;
-	/*margin-bottom: 15px;*/
-}
-div.comment_detail {
-	max-height: 300px;
-	overflow-y: auto;
-}
-
-div.comment_item a {
-	text-decoration: none;
-	color: #406EF6;
-}
-
-#keyword_div {
-	position: absolute;
-	top: 50px;
-	right: 100px;
-	width: 300px;
-}
-
-.keyword_span {
-	position: relative;
-	padding: 5px 10px;
-	border: 1px #FF9B00 solid;
-	box-shadow: 1px 1px 1px #888888;
-	display: inline-block;
-}
-
-#sentiment_all_div {
-	position: absolute;
-	top: 200px;
-	left: 100px;
-	width: 100px;
-}
-
-.sentiment_all_span {
-	position: relative;
-}
-
-#sentiment_all_div {
-	position: relative;
-	top: 0px;
-	left: 0px;
-	width: 100px;
-	opacity: 0.5;
-}
-
-.sentiment_all_span {
-	position: relative;
-	opacity: 0.5;
-}
-
-.load_fail {
-	text-align: center;
-}
-
-
-</style>
 <body>
 
 <div class="header">
@@ -138,16 +17,16 @@ div.comment_item a {
 	</form>
 	</div> -->
 </div>
-<div id="keyword_div">
-	<div class="keyword_span"></div>
-</div>
-<div id="sentiment_all_div">
-	<div class="sentiment_all_span"></div>
-</div>
+
 <div id="view">
 </div>
-
 </body>
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/d3.js"></script>
+<script type="text/javascript" src="/js/d3.layout.cloud.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
 
 <script type="text/javascript">	
 	var width = 960;
@@ -585,8 +464,7 @@ div.comment_item a {
 			.charge( function(d) { 
 				if (d.id == 0) {return 0;} else {return 200;} 
 			;});
-	  
-		
+
 		var link = svg.selectAll(".link")
 		  .data(links)
 		  .enter()
@@ -663,27 +541,52 @@ div.comment_item a {
 			force.tick();
 		});
 
-
 		// create keyword tags
-		keyword_div = $("#keyword_div");
-		keyword_span = $(".keyword_span:first")
-		graph.keywords.forEach(function(d, i) {
-			if (keyword_span.text() == "") {
-				// console.log(d.weight);
-				// console.log("rgba(255,155,0," + (d.weight/10).toFixed(2) + ")")
-				keyword_span.text(d.keyword);
-				keyword_span.css("background-color", "rgba(255,155,0," + (d.weight/10).toFixed(2) + ")");
-			}
-			else {
+		if (graph.keywords.length > 0) {
+			$("#view").append($("<div id='keyword_div' />"));
+			keyword_div = $("#keyword_div");
+			keyword_div.append($('<span>标签：</span>'))
+			keyword_span = null;
+			// keyword_span = $(".keyword_span:first");
+			graph.keywords.forEach(function(d) {
+				if (keyword_span == null) {
+					keyword_span = $("<div class='keyword_span'></div>");
+					span = keyword_span;
+				}
 				span = keyword_span.clone();
 				span.text(d.keyword);
-				span.css("background-color", "rgba(255,155,0," + (d.weight/10).toFixed(2) + ")");
+				alpha = Math.min((d.weight/10), 0.8)
+				span.css("background-color", "rgba(255,155,0," + alpha.toFixed(2) + ")");
 				keyword_div.append(span);
-			};
-		});
+			});
+		}
 
 		// create sentiment tags
-		
+		sen_color = ["#FF3B00", "#FFEB3B", "#01C832"];
+		bar_length = 200;
+		if (graph.spec.sentiments[0] > 0) {
+			// for all.
+			$('#view').append($("<div id='sentiment_all_div' />"));
+			sentiment_all_div = $("#sentiment_all_div");
+			sentiment_all_div.append($('<span>评价：</span>'))
+			sentiment_all_span = null;
+			sentiment_all_arr = graph.spec.sentiments;
+			total_sentiment = sentiment_all_arr[0];
+			sentiment_all_div.width(bar_length);
+			sentiment_all_arr.slice(1,5).forEach(function(d, i) {
+				if (sentiment_all_span == null) {
+					sentiment_all_span = $("<div class='sentiment_all_span grow' data-toggle='tooltip' data-placement='top' title=''></div>");
+					span = sentiment_all_span;
+				}
+				span = sentiment_all_span.clone();
+				span.attr("title", "共有" + d + "条评价");
+				span.width((bar_length*d/total_sentiment).toFixed(2));
+				span.css("background-color", sen_color[i]);
+				// console.log(1);
+				sentiment_all_div.append(span);
+			}); 
+
+		}
 
 		// begin father node creation
 		
@@ -711,8 +614,13 @@ div.comment_item a {
 		var comment_div = document.createElement("div");
 		comment_div.className = "tag_detail";
 		var content = ' \
-			<h4></h4> \
+			<div><h4></h4> \
 			<span class="cancel_button" style="cursor:pointer;"><img src="image/tag-close.png" /></span> \
+			<div id="sentiment_div"> \
+				<span class="sentiment_span grow" data-toggle="tooltip" data-placement="top" title=""></span> \
+				<span class="sentiment_span grow" data-toggle="tooltip" data-placement="top" title=""></span> \
+				<span class="sentiment_span grow" data-toggle="tooltip" data-placement="top" title=""></span> \
+			</div></div> \
 			<div class="comment_detail"></div> \
 		';
 		comment_div.innerHTML =  content;
@@ -727,6 +635,9 @@ div.comment_item a {
 			var comment_item, comment_tmp;
 			var comment_detail = document.getElementsByClassName("comment_detail")[0];
 			comment_detail.innerHTML = null;
+
+			$(comment_detail).unbind("scroll");
+
 			for (var i = 0; i < comment_list.length; ++i) {
 				if (i == 0) {
 					var comment = '\
@@ -765,9 +676,20 @@ div.comment_item a {
 			tag_detail.style.top = (d3.select(this)[0][0].__data__.y) + "px";
 			comment_detail.scrollTop = 0;
 
+			// for tag sentiment
+			var bar_length = 150;
+			// sen_color = ["#FF3B00", "#03A9F4", "#BFCFD5"];
+			if (graph.sentiments.length > 0) {
+				$(".sentiment_span").toArray().forEach(function(e, i) {
+					sentiment_arr = graph.sentiments[d.id-1];
+					$(e).width((bar_length*sentiment_arr[i+1]/sentiment_arr[0]).toFixed(2));
+					$(e).css("background-color", sen_color[i]);
+					$(e).attr("title", "共有" + sentiment_arr[i+1] + "条评价")
+				});
+			};
+
 			var load_offset = 0;
 			function loadMore() {
-				console.log("load!");
 				url = "/spec/" + spec.name + "/load_more/" + d.name + "/" + load_offset;
 				$.ajax({
 					url: url,
@@ -841,7 +763,7 @@ div.comment_item a {
 		};
 
 		document.getElementsByClassName("cancel_button")[0].onclick = function(e) {
-			this.parentNode.style.display = "none";
+			this.parentNode.parentNode.style.display = "none";
 			var ev = e || window.event;
 	        if(ev.stopPropagation){
 	            ev.stopPropagation();
@@ -857,6 +779,56 @@ div.comment_item a {
 			if (tag_detail != null && tag_detail.style.display == "block") 
 				tag_detail.style.display = "none";
 		};
+
+		function wordcloud_draw(words) {
+			var fill = d3.scale.category20();
+
+			console.log(words);
+			d3.layout.cloud().size([300, 100])
+				.words([
+			        "Hello", "world", "normally", "you", "want", "more", "words",
+			        "than", "this"].map(function(d) {
+				        return {text: d, size: 10 + Math.random() * 90};
+			      }))
+				.padding(5)
+				.rotate(function() {return ~~(Math.random()*2)*90;})
+				.fontSize(function(d) {return d.size;})
+				.on("end", draw)
+				.start();
+
+			function draw(words) {
+				d3.select("#view").append("svg")
+					.attr("width", 400)
+					.attr("height", 150)
+					.attr("id", "wordcloud")
+					.append("g")
+					.attr("trasform", "translate(320,200)")
+					.selectAll("text")
+					.data(words)
+					.enter().append("text")
+					.style("font-size", function(d) { return d.size + "px"; })
+					.style("fill", function(d, i) { return fill(i); })
+    				.style("font-family", "黑体")
+    				.attr("transform", function(d) {
+                        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                    })
+                    .text(function(d) { return d.text; });
+
+			};
+		};
+
+		// $.ajax({
+		// 	url: "/wordcloud/" + graph.spec.name,
+		// 	success: function(data) {
+		// 		words = data;
+		// 		wordcloud_draw(words);
+		// 	},
+		// 	error: function() {
+		// 		console.log("error in loading wordcloud");
+		// 		// get to 500 error.
+		// 	}
+		// });
+
 	}	
 
 </script>
