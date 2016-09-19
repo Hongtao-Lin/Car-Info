@@ -3,11 +3,11 @@
 A project for extracting and analyzing users' comments on cars.
 
 This repo includes the following five functions: 
-- [Web crawler](web_crawler).
+- [Web crawler](#web_crawler).
 - [Text classification](#text_classification)
 - Key-phrase extraction
 - Sentiment analysis
-- Web application integrating above three functions
+- [Web application](#web_app) integrating above three functions
 - (plus) Word vector remapping to sentiment aware embedding
 
 The following several sections will introduce these functions respectively, each of the section includes its own requirements, usage and notes.
@@ -85,9 +85,9 @@ We also tried several other ways (totally 4) to improve the rules, see `Main.py`
 
 xlrd, xlwt, jieba 
 
-### Notes
-
 ## Sentiment Analysise
+
+TODO
 
 ## Web App
 
@@ -101,7 +101,6 @@ To run in foreground:
 ```bash
 node carinfo.js # start
 ```
-
 
 To run it in background, we need a nodejs package: `forever`:
 ```bash
