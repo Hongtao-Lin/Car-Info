@@ -8,7 +8,7 @@ This repo includes the following six parts:
 - [Key-phrase extraction](#keyphrase_extraction)
 - [Sentiment analysis](#sent_ana)
 - [Web application](#web_app) integrating above three functions
-- [Word vector remapping to sentiment aware embedding](#word distance)
+- [Word vector remapping to sentiment aware embedding](#word_distance)
 
 The following several sections will introduce each part respectively, each of the section includes its own requirements, usage and notes.
 
@@ -64,7 +64,7 @@ torch7, hdf5
 - text_clf/car_train.py: It offers automatic training of multiple experiments. Using `matplotlib` to plot the results.
 - text_clf/evalute.py: It offers ways to evalute the model, also predict passage function is included.
 - text_clf/test_passage2.py: These two files are actually test set for passage prediction. Data collected from xcar.
-- sent-conv-torch/: CNN code via lua. Actually copied from repo [here](https://github.com/harvardnlp/sent-conv-torch/). Difference: our dataset is in `data/custom.*`
+- sent-conv-torch/: CNN code via lua. Actually copied from repo [here](https://github.com/harvardnlp/sent-conv-torch/). The folder in this repo is broken :(
 
 ## Keyphrase Extraction
 
