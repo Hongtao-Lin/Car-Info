@@ -2,17 +2,15 @@
 
 A project for extracting and analyzing users' comments on cars.
 
-This repo includes the following five functions: 
+This repo includes the following six parts: 
 - [Web crawler](#web_crawler).
 - [Text classification](#text_classification)
-- Key-phrase extraction
-- Sentiment analysis
+- [Key-phrase extraction](#keyphrase_extraction)
+- [Sentiment analysis](#sent_ana)
 - [Web application](#web_app) integrating above three functions
-- (plus) Word vector remapping to sentiment aware embedding
+- [Word vector remapping to sentiment aware embedding](#word distance)
 
-The following several sections will introduce these functions respectively, each of the section includes its own requirements, usage and notes.
-
-Note that each functions mentioned corresponds to a directory in the repo, except that 'text classification' resides in 'text_clf/' and 'sent-conv-torch/'
+The following several sections will introduce each part respectively, each of the section includes its own requirements, usage and notes.
 
 ## Web Crawler
 
@@ -65,11 +63,8 @@ torch7, hdf5
 - text_clf/car_preprocessing_tool.py: It offers useful tools to manipulate data crawled. Also the basic training models and testing tools.
 - text_clf/car_train.py: It offers automatic training of multiple experiments. Using `matplotlib` to plot the results.
 - text_clf/evalute.py: It offers ways to evalute the model, also predict passage function is included.
-- text_clf/test_passage(2).py: These two files are actually test set for passage prediction. Data collected from xcar.
+- text_clf/test_passage2.py: These two files are actually test set for passage prediction. Data collected from xcar.
 - sent-conv-torch/: CNN code via lua. Actually copied from repo [here](https://github.com/harvardnlp/sent-conv-torch/). Difference: our dataset is in `data/custom.*`
-
-### Note
-
 
 ## Keyphrase Extraction
 
@@ -85,7 +80,7 @@ We also tried several other ways (totally 4) to improve the rules, see `Main.py`
 
 xlrd, xlwt, jieba 
 
-## Sentiment Analysise
+## Sentiment Analysize
 
 TODO
 
